@@ -15,8 +15,8 @@ class Addon{
         int velX;
         int velY;
         int type;
-        sf::Texture texture;
-        sf::Sprite sprite;
+        Texture texture;
+        Sprite sprite;
     public:
         Addon();
         Sprite getSprite(){

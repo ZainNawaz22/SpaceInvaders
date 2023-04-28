@@ -70,4 +70,29 @@ public:
 	{
 		return sprite.getPosition().y;
 	}
+
+	// check for keybord input
+	void check_input()
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		{
+			move("l");
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		{
+			move("r");
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		{
+			move("u");
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		{
+			move("d");
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		{
+			fire();
+		}
+	}
 };

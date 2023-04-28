@@ -1,6 +1,5 @@
 #pragma once
 
-#include "stdafx.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <time.h>
@@ -16,8 +15,8 @@ class Addon{
         int velX;
         int velY;
         int type;
-        Texture texture;
-        Sprite sprite;
+        sf::Texture texture;
+        sf::Sprite sprite;
     public:
         Addon();
         Sprite getSprite(){

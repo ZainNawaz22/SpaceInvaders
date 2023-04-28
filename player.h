@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <string.h>
 #include "Bullet.h"
+#include "Addon.h"
 using namespace sf;
 class Player
 {
@@ -9,6 +10,8 @@ public:
 	Sprite sprite;
 	float speed = 0.1;
 	int x, y;
+	bool isAlive = true;
+	bool addonActive = false;
 	Player(std::string png_path)
 	{
 
@@ -58,6 +61,34 @@ public:
 		else if (sprite.getPosition().y < 0)
 			sprite.setPosition(sf::Vector2f(sprite.getPosition().x, 700));
 	}
+
+	// make a function that checks if player collides with addon
+	void onAddonPickup(Addon &*a, int &addon_count){
+		if (sprite.getGlobalBounds().intersects(a->getSprite().getGlobalBounds())){
+			addonActive = true;
+			if(a->getType() == 1){
+				//powerup
+				speed += 0.1;
+				// create a timer that will run for 10 seconds and then set the speed back to normal
+				delete a;
+				addon_count--;
+				a = nullptr;
+			}
+			else if(a->getType() == 2){
+				//fire
+				//fire();
+			}
+			else if(a->getType() == 3){
+				//danger
+				//speed -= 0.1;
+			}
+			else if(a->getType() == 4){
+				//lives
+				//lives++;
+			}
+		}
+	}
+
 
 	// make the function that constantly checks the players position
 

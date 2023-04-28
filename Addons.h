@@ -23,6 +23,9 @@ class Addon{
         Sprite getSprite(){
             return sprite;
         }
+        int getType(){
+            return type;
+        }
         
 }
 

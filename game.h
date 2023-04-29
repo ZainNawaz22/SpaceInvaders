@@ -1,9 +1,10 @@
-
 #include <SFML/Graphics.hpp>
 #include <time.h>
 #include "player.h"
 #include "Enemy.h"
-// #include "Bullet.h"
+#include "Invaders.h"
+//#include "Bomb.h"
+//#include "Bullet.h"
 
 
 const char title[] = "OOP-Project, Spring-2023";
@@ -18,21 +19,61 @@ public:
     // add other game attributes
     Enemy *E; // enemy
     Bullet *b; // bullet
+    Invaders *I; // invaderss
 
+    Bomb *bombsArray; // array of bombs
+    int bombCount; // number of bombs
+    Invaders *invadersArray; // array of invaders
+    int invadersCount; // number of invaders
     
 
     Game()
     {
         p = new Player("img/player_ship.png");
-        E = new Enemy("img/enemy_1.png", 0.01);
+        E = new Enemy("img/enemy_1.png");
         b = new Bullet("img/PNG/zain.png", 0.01, true);
-      
-        
+        I = new Invaders("img/enemy_1.png");
+
+        bombsArray = new Bomb[0];
+        bombCount = 0;
+
+        invadersArray = new Invaders[0];
+        invadersCount = 0;
 
         bg_texture.loadFromFile("img/background.jpg");
         background.setTexture(bg_texture);
         background.setScale(2.25, 1.35);
     }
+    void addBomb(Bomb &b)
+    {
+        Bomb *temp = new Bomb[bombCount + 1];
+        for (int i = 0; i < bombCount; i++)
+        {
+            temp[i] = bombsArray[i];
+        }
+        temp[bombCount] = b;
+        bombCount++;
+        bombsArray = temp;
+    }
+
+    void spawnBomb()
+    {
+        Bomb b;
+        addBomb(b);
+    }
+
+    void addInvader(Invaders &i)
+    {
+        Invaders *temp = new Invaders[invadersCount + 1];
+        for (int i = 0; i < invadersCount; i++)
+        {
+            temp[i] = invadersArray[i];
+        }
+        temp[invadersCount] = i;
+        invadersCount++;
+        invadersArray = temp;
+    }
+
     void start_game()
     {
         srand(time(0));
@@ -72,7 +113,18 @@ public:
             b->setPos(p->sprite.getPosition().x + 20, p->sprite.getPosition().y);
             //
 
-            
+            // loop through all the invaders
+            for (int i = 0; i < invadersCount; i++)
+            {
+                // call onFrame
+                invadersArray[i].onFrame(time);
+                // if invader.getdropBomb() == true
+                if (invadersArray[i].getDropBomb())
+                {
+                    spawnBomb();
+                }
+
+            }
           
 
             //////////////////////////////////////////////
@@ -81,7 +133,32 @@ public:
             window.draw(background);    // setting background
             window.draw(p->sprite);     // setting player on screen
             window.draw(E->getSprite()); // setting enemy on screen
-            window.draw(b->getSprite()); // setting bullet on screen
+            //window.draw(b->getSprite()); // setting bullet on screen
+            // draw all the invaders
+            for (int i = 0; i < invadersCount; i++)
+            {
+                invadersArray[i].onFrame(time); // call onFrame
+                invadersArray[i].move(); // call move
+                window.draw(invadersArray[i].getSprite());
+            }
+
+            // draw all the bombs
+            for (int i = 0; i < bombCount; i++)
+            {
+                window.draw(bombsArray[i].getSprite());
+            }
+
+            // draw all the addons
+
+            // draw the fire bullets
+
+
+//    for (int i = 0; i < 50; i++) {
+//        b[i].move();
+//         window.draw(b[i].getSprite());
+//     }
+
+
            
             window.display(); // Displying all the sprites
         }

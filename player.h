@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <string.h>
 #include "Bullet.h"
+#include "Addons.h"
 using namespace sf;
 class Player
 {
@@ -21,9 +22,36 @@ public:
 	}
 	void fire()
 	{
-		// Bullet b("img/PNG/zain.png", 0.01, true);
-		// b.setPos(sprite.getPosition().x + 20, sprite.getPosition().y);
-		// //bullets.push_back(b);
+		const int Max_Bullets = 50;
+		Bullet *bullets[Max_Bullets];
+		int bullet_count = 0;
+		for (int i = 0; i < Max_Bullets; i++)
+		{
+			bullets[i] = nullptr;
+		}
+
+		for (int i = 0; i < Max_Bullets; i++)
+		{
+			if (bullets[i] != nullptr)
+			{
+				bullets[i]->move();
+				if (bullets[i]->getSprite().getPosition().y < 0)
+				{
+					delete bullets[i];
+					bullets[i] = nullptr;
+					bullet_count--;
+				}
+			}
+		}
+
+		if (bullet_count < Max_Bullets)
+		{
+			bullets[bullet_count] = new Bullet("img/PNG/lasers/laserBlue01.png", 0.5, true);
+			bullets[bullet_count]->setPos(sprite.getPosition().x + 20, sprite.getPosition().y);
+			bullet_count++;
+		}
+
+	
 	}
 	void move(std::string s)
 	{
@@ -45,7 +73,7 @@ public:
 		sprite.move(sf::Vector2f(delta_x, delta_y));
 	}
 
-	// make the functions that the screeen acts as a wrap around the player enters from one side and exits from the other side of the screen and same for the top and bottom
+	
 
 	void wrap()
 	{
@@ -58,6 +86,36 @@ public:
 		else if (sprite.getPosition().y < 0)
 			sprite.setPosition(sf::Vector2f(sprite.getPosition().x, 700));
 	}
+
+	// make a function that checks if player collides with addon
+	void onAddonPickup(Addon *&a, int &addon_count){
+		if (sprite.getGlobalBounds().intersects(a->getSprite().getGlobalBounds())){
+			bool addonActive = true;
+			if(a->getType() == 1){
+				//powerup
+				speed += 0.1;
+				// create a timer that will run for 10 seconds and then set the speed back to normal
+				delete a;
+				addon_count--;
+				a = nullptr;
+			}
+			else if(a->getType() == 2){
+				//fire
+				//fire();
+			}
+			else if(a->getType() == 3){
+				//danger
+				//speed -= 0.1;
+			}
+			else if(a->getType() == 4){
+				//lives
+				//lives++;
+
+
+			}
+		}
+	}
+
 
 	// make the function that constantly checks the players position
 

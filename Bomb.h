@@ -16,6 +16,20 @@ class Bomb{
         float speed;
         bool direction;
     public:
+
+        Sprite getSprite(){
+            return Bomb_sprite;
+        }
+
+        Bomb(){
+            Bomb_tex.loadFromFile("img/PNG/zain.png");
+            Bomb_sprite.setTexture(Bomb_tex);
+            Bomb_sprite.setScale(0.75, 0.75);
+            // enemy will be spawned at random x position
+            Bomb_sprite.setPosition(sf::Vector2f(0, 0));
+            this->speed = 0;
+            this->direction = true;
+        }
         Bomb(const string &png_path, float speed){
             Bomb_tex.loadFromFile(png_path);
             Bomb_sprite.setTexture(Bomb_tex);
@@ -49,4 +63,4 @@ class Bomb{
         bool getDir(){
             return direction;
         }
-}
+};

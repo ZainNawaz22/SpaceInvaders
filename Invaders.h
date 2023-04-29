@@ -10,6 +10,12 @@ class Invaders: public Enemy
         int bombTimer;
         bool dropBomb;
     public:
+        Invaders(){
+            bombRate = 1;
+            bombSpeed = 1;
+            bombCount = 1;
+            moveDirection = 1;
+        }
         Invaders(const string &png_path): Enemy(png_path){
             bombRate = 1;
             bombSpeed = 1;
@@ -29,13 +35,27 @@ class Invaders: public Enemy
             }
         };
         
-        void setBombRate(int rate);
-        void setBombSpeed(int speed);
-        void setBombCount(int count);
-        int getBombRate();
-        int getBombSpeed();
-        int getBombCount();
-        bool getDropBomb();
+        void setBombRate(int rate){
+            bombRate = rate;
+        }
+        void setBombSpeed(int speed){
+            bombSpeed = speed;
+        }
+        void setBombCount(int count){
+            bombCount = count;
+        }
+        int getBombRate(){
+            return bombRate;
+        }
+        int getBombSpeed(){
+            return bombSpeed;
+        }
+        int getBombCount(){
+            return bombCount;
+        }
+        bool getDropBomb(){
+            return dropBomb;
+        }
 
         void onFrame(int deltaTime){
             bombTimer += deltaTime;

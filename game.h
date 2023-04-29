@@ -1,11 +1,10 @@
-
 #include <SFML/Graphics.hpp>
 #include <time.h>
 #include "player.h"
 #include "Enemy.h"
 #include "Invaders.h"
-#include "Bomb.h"
-// #include "Bullet.h"
+//#include "Bomb.h"
+//#include "Bullet.h"
 
 
 const char title[] = "OOP-Project, Spring-2023";
@@ -59,7 +58,7 @@ public:
 
     void spawnBomb()
     {
-        Bomb b("img/PNG/zain.png", 0.01, false);
+        Bomb b;
         addBomb(b);
     }
 
@@ -118,7 +117,7 @@ public:
             for (int i = 0; i < invadersCount; i++)
             {
                 // call onFrame
-                invadersArray[i].onFrame();
+                invadersArray[i].onFrame(time);
                 // if invader.getdropBomb() == true
                 if (invadersArray[i].getDropBomb())
                 {
@@ -134,7 +133,32 @@ public:
             window.draw(background);    // setting background
             window.draw(p->sprite);     // setting player on screen
             window.draw(E->getSprite()); // setting enemy on screen
-            window.draw(b->getSprite()); // setting bullet on screen
+            //window.draw(b->getSprite()); // setting bullet on screen
+            // draw all the invaders
+            for (int i = 0; i < invadersCount; i++)
+            {
+                invadersArray[i].onFrame(time); // call onFrame
+                invadersArray[i].move(); // call move
+                window.draw(invadersArray[i].getSprite());
+            }
+
+            // draw all the bombs
+            for (int i = 0; i < bombCount; i++)
+            {
+                window.draw(bombsArray[i].getSprite());
+            }
+
+            // draw all the addons
+
+            // draw the fire bullets
+
+
+//    for (int i = 0; i < 50; i++) {
+//        b[i].move();
+//         window.draw(b[i].getSprite());
+//     }
+
+
            
             window.display(); // Displying all the sprites
         }

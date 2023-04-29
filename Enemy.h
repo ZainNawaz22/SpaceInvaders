@@ -15,6 +15,16 @@ protected:
     Sprite sprite;
 
 public:
+
+    Enemy()
+    {
+        tex.loadFromFile("img/enemy.png");
+        sprite.setTexture(tex);
+        sprite.setScale(0.75, 0.75);
+        // enemy will be spawned at random x position
+        sprite.setPosition(sf::Vector2f(0, 0));
+    }
+
     Enemy(const string &png_path)
     {
         tex.loadFromFile(png_path);

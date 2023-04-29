@@ -23,7 +23,7 @@ public:
         Bullet_tex.loadFromFile(png_path);
         Bullet_sprite.setTexture(Bullet_tex);
         Bullet_sprite.setScale(0.75, 0.75);
-        // enemy will be spawned at random x position
+      
         Bullet_sprite.setPosition(sf::Vector2f(0, 0));
         this->speed = speed;
         this->direction = direction;
@@ -32,7 +32,7 @@ public:
     void move()
     {
         
-        //write code that moves the bullet from bottom to top
+      
         if (direction == true)
         {
             Bullet_sprite.move(sf::Vector2f(0, -speed));
@@ -73,6 +73,7 @@ public:
     {
         return Bullet_sprite;
     }
+
 
 
 };

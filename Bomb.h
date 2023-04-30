@@ -63,4 +63,16 @@ class Bomb{
         bool getDir(){
             return direction;
         }
+
+        void draw(RenderWindow &window){
+            window.draw(Bomb_sprite);
+        }
+
+        void setSpeed(float speed){
+            this->speed = speed;
+        }
+
+        float getSpeed(){
+            return speed;
+        }
 };

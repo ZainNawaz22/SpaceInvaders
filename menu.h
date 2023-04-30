@@ -14,7 +14,7 @@ public:
     void display_menu()
 
     {
-        RenderWindow window(VideoMode(500, 600), "OOP-Project, Spring-2023");
+        RenderWindow window(VideoMode(350, 600), "OOP-Project, Spring-2023");
         Texture menu_texture;
         menu_texture.loadFromFile("img/background.png");
         Sprite menu_sprite(menu_texture);
@@ -23,7 +23,17 @@ public:
         Texture start_button_texture;
         start_button_texture.loadFromFile("img/PNG/UI/buttonGreen.png");
         Sprite start_button_sprite(start_button_texture);
-        start_button_sprite.setPosition(150, 200);
+        start_button_sprite.setPosition(90, 200);
+
+        // Add text to the start button
+        Font font;
+        font.loadFromFile("fonts/GAME_glm.ttf");
+        Text start_button_text;
+        start_button_text.setFont(font);
+        start_button_text.setString("Start");
+        start_button_text.setCharacterSize(24);
+        start_button_text.setFillColor(Color::Black);
+        start_button_text.setPosition(155, 195);
 
 
         // Main Menu Loop
@@ -32,6 +42,7 @@ public:
             Event event;
             while(window.pollEvent(event))
             {
+
                 switch (event.type)
                 {
                 case Event::Closed:
@@ -46,6 +57,10 @@ public:
                             // start the game
                             Game g;
                             g.start_game();
+
+                            //also close the menu window
+                            window.close();
+
                         }
                     }
                     break;
@@ -54,8 +69,10 @@ public:
 
             // draw the menu
             window.clear();
+            
             window.draw(menu_sprite);
             window.draw(start_button_sprite);
+            window.draw(start_button_text);
             window.display();
             
 

@@ -104,13 +104,14 @@ public:
                 p->move("d");                            // player will move downwards
 
             if(Keyboard::isKeyPressed(Keyboard::Space))
-                p->fire();
+                //p->fire();
+                p->drawBullets(window);
             ////////////////////////////////////////////////
             /////  Call your functions here            ////
             p->wrap();
             E->move();
-            b->move();
-            b->setPos(p->sprite.getPosition().x + 20, p->sprite.getPosition().y);
+            // b->move();
+            // b->setPos(p->sprite.getPosition().x + 20, p->sprite.getPosition().y);
             //
 
             // loop through all the invaders
@@ -151,6 +152,12 @@ public:
             // draw all the addons
 
             // draw the fire bullets
+        //         for (int i = 0; i < 50; i++)
+        // {
+        // window.draw(b[i].getSprite());
+        // b[i].move(); }
+
+
 
 
 //    for (int i = 0; i < 50; i++) {

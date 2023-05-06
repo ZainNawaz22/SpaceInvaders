@@ -22,29 +22,6 @@ public:
 	}
 void fire()
 {
-    const int MAX_BULLETS = 50; // maximum number of bullets
-    static Bullet* bullets[MAX_BULLETS] = {nullptr}; // array to store the bullets
-    static int num_bullets = 0; // number of bullets currently active
-
-    // update positions of active bullets and delete any that have gone offscreen
-    for (int i = 0; i < num_bullets; i++)
-    {
-        bullets[i]->move();
-        if (bullets[i]->getSprite().getPosition().y < 0)
-        {
-            delete bullets[i];
-            bullets[i] = nullptr;
-            num_bullets--;
-        }
-    }
-
-    // create a new bullet if there is room in the array
-    if (num_bullets < MAX_BULLETS)
-    {
-        bullets[num_bullets] = new Bullet("img/PNG/Lasers/laserBlue01.png", 0.5, true);
-        bullets[num_bullets]->setPos(sprite.getPosition().x + 20, sprite.getPosition().y);
-        num_bullets++;
-    }
 }
 
 	void move(std::string s, double delta_time)
@@ -129,34 +106,11 @@ void fire()
 
 	void drawBullets(sf::RenderWindow &window)
 	{
-		const int MAX_BULLETS = 50; // maximum number of bullets
-		static Bullet* bullets[MAX_BULLETS] = { nullptr }; // array to store the bullets
-		static int num_bullets = 0; // number of bullets currently active
+	}
 
-		// update positions of active bullets and delete any that have gone offscreen
-		for (int i = 0; i < num_bullets; i++)
-		{
-			bullets[i]->move();
-			if (bullets[i]->getSprite().getPosition().y < 0)
-			{
-				delete bullets[i];
-				bullets[i] = nullptr;
-				num_bullets--;
-			}
-		}
-
-		// create a new bullet if there is room in the array
-		if (num_bullets < MAX_BULLETS)
-		{
-			bullets[num_bullets] = new Bullet("img/PNG/Lasers/laserBlue01.png", 0.5, true);
-			bullets[num_bullets]->setPos(sprite.getPosition().x + 20, sprite.getPosition().y);
-			num_bullets++;
-		}
-
-		// draw the bullets
-		for (int i = 0; i < num_bullets; i++)
-		{
-			window.draw(bullets[i]->getSprite());
-		}
+	Vector2f getPosition()
+	{
+		// return the center position of the player
+		return Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width / 2, sprite.getPosition().y + sprite.getGlobalBounds().height / 2);
 	}
 };

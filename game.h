@@ -20,7 +20,7 @@ public:
     Enemy *E; // enemy
     int enemyCount; // number of enemies
 
-    Bullet *b; // bullet
+    
     Invaders *I; // invaderss
 
         // E = new Enemy[enemyCount];
@@ -32,8 +32,8 @@ public:
 
     Lives livesArray; // array of lives
 
-    // Bullets *array; // array of bullets
-    // int bulletCount; // number of bullets
+    Bullet *BulletArray; // array of bullets
+    int bulletCount; // number of bullets
 
     
 
@@ -41,7 +41,6 @@ public:
     {
         p = new Player("img/player_ship.png");
         E = new Enemy("img/enemy_1.png");
-        b = new Bullet("img/PNG/zain.png", 0.01, true);
         I = new Invaders("img/enemy_1.png");
         // draw the Lives Addons from Addons.h
         // enemyCount = 1;
@@ -53,6 +52,9 @@ public:
 
         bombsArray = new Bomb[0];
         bombCount = 0;
+
+        BulletArray = new Bullet[0];
+        bulletCount = 0;
 
         invadersArray = new Invaders[0];
         invadersCount = 0;
@@ -78,6 +80,24 @@ public:
     {
         Bomb b("img/PNG/zain.png", 150, pos);
         addBomb(b);
+    }
+
+    void addBullet(Bullet &b)
+    {
+        Bullet *temp = new Bullet[bulletCount + 1];
+        for (int i = 0; i < bulletCount; i++)
+        {
+            temp[i] = BulletArray[i];
+        }
+        temp[bulletCount] = b;
+        bulletCount++;
+        BulletArray = temp;
+    }
+
+    void spawnBullet(Vector2f pos)
+    {
+        Bullet b("img/PNG/Lasers/laserBlue01.png", 150, pos);
+        addBullet(b);
     }
 
     void addInvader(Invaders &i)
@@ -119,6 +139,9 @@ public:
         double dt;
 
         double invaderSpawnTimer = 5;
+        double bulletSpawnTimer = 1;
+
+        
 
         while (window.isOpen())
         {
@@ -128,6 +151,7 @@ public:
             
             timer += time;
             invaderSpawnTimer -= dt;
+            bulletSpawnTimer -= dt;
             
             Event e;
             while (window.pollEvent(e))
@@ -146,7 +170,15 @@ public:
                 p->move("d", dt);                            // player will move downwards
 
             if(Keyboard::isKeyPressed(Keyboard::Space)){
-                E->move();
+                //when spacebar is pressed bullets should be drawn from the player
+                spawnBullet(p->getPosition());
+
+                for(int i = 0; i < bulletCount; i++)
+                {
+                    BulletArray[i].move(dt);
+                    BulletArray[i].draw(window);
+                }
+
 
             }
             ////////////////////////////////////////////////
@@ -224,6 +256,15 @@ public:
                     spawnBomb(invadersArray[i].getCenter());
                 }
             }
+
+            // draw all bullets
+            for(int i = 0; i < bulletCount; i++)
+            {
+                BulletArray[i].move(dt);
+                BulletArray[i].draw(window);
+            }
+            
+            
             
             
 

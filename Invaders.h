@@ -9,30 +9,32 @@ class Invaders: public Enemy
         int moveDirection;
         int bombTimer;
         bool dropBomb;
+        int velocity;
     public:
         Invaders(){
+            velocity = 100;
             bombRate = 1;
             bombSpeed = 1;
             bombCount = 1;
             moveDirection = 1;
+            sprite.setPosition(200, 0);
         }
         Invaders(const string &png_path): Enemy(png_path){
+            velocity = 100;
             bombRate = 1;
             bombSpeed = 1;
             bombCount = 1;
             moveDirection = 1;
+            sprite.setPosition(200, 0);
         };
 
-        void move(){
-            // move sprite in x direction
-            sprite.move(moveDirection, 0);
-            // if sprite reaches the end of the screen
-            if(sprite.getPosition().x > 700 || sprite.getPosition().x < 0){
-                // move sprite in y direction
-                sprite.move(0, 50);
-                // change direction
-                moveDirection = -moveDirection;
+        void move(int deltaTime = 0){
+    
+            sprite.move(sf::Vector2f(0, velocity * moveDirection * deltaTime));
+            if(sprite.getPosition().y > 600){
+                moveDirection *= -1;
             }
+
         };
         
         void setBombRate(int rate){

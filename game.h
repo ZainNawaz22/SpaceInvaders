@@ -37,7 +37,7 @@ public:
     Game()
     {
         p = new Player("img/player_ship.png");
-        //E = new Enemy("img/enemy_1.png");
+        E = new Enemy("img/enemy_1.png");
         b = new Bullet("img/PNG/zain.png", 0.01, true);
         I = new Invaders("img/enemy_1.png");
         // draw the Lives Addons from Addons.h
@@ -119,14 +119,26 @@ public:
     {
         srand(time(0));
         RenderWindow window(VideoMode(780, 700), title);
+        // set fps
+        window.setFramerateLimit(60);
       
         Clock clock;
         float timer = 0;
+
+        Invaders I("img/enemy_1.png");
+        addInvader(I);
+
+        Clock deltaClock;
+        double dt;
+
+
 
         while (window.isOpen())
         {
             float time = clock.getElapsedTime().asSeconds();
             clock.restart();
+            dt = deltaClock.restart().asMicroseconds()/1000000.0f;
+            
             timer += time;
             Event e;
             while (window.pollEvent(e))
@@ -145,74 +157,37 @@ public:
                 p->move("d");                            // player will move downwards
 
             if(Keyboard::isKeyPressed(Keyboard::Space)){
+                E->move();
 
             }
             ////////////////////////////////////////////////
             /////  Call your functions here            ////
-            //E->move();
+
             p->wrap();
-            drawEnemies(window);
+          
             
 
-            // b->move();
-            // b->setPos(p->sprite.getPosition().x + 20, p->sprite.getPosition().y);
-            //
-
-            // loop through all the invaders
-            // for (int i = 0; i < invadersCount; i++)
-            // {
-            //     // call onFrame
-            //     invadersArray[i].onFrame(time);
-            //     // if invader.getdropBomb() == true
-            //     if (invadersArray[i].getDropBomb())
-            //     {
-            //         spawnBomb();
-            //     }
-
-            // }
+            
           
 
             //////////////////////////////////////////////
 
 
             
-            // // draw all the enemies
+           
          
 
             window.clear(Color::Black); // clears the screen
             window.draw(background);    // setting background
             window.draw(p->sprite);     // setting player on screen
-            //window.draw(E->getSprite()); // setting enemy on screen
-            //window.draw(b->getSprite()); // setting bullet on screen
+
+            for(int i = 0; i < invadersCount; i++)
+            {
+                invadersArray[i].move(dt);
+                window.draw(invadersArray[i].getSprite());
+            }
             
 
-            // draw all the invaders
-            // for (int i = 0; i < invadersCount; i++)
-            // {
-            //     invadersArray[i].onFrame(time); // call onFrame
-            //     invadersArray[i].move(); // call move
-            //     window.draw(invadersArray[i].getSprite());
-            // }
-
-            // // draw all the bombs
-            // for (int i = 0; i < bombCount; i++)
-            // {
-            //     window.draw(bombsArray[i].getSprite());
-            // }
-
-            //    for(int i = 0; i < enemyCount; i++){
-            //     E[i].move();
-            //     window.draw(E[i].getSprite());
-            // }
-
-                // E[0].move();
-                // window.draw(E[0].getSprite());
-
-
-            
-            // livesArray.move();
-
-            // window.draw(livesArray.getSprite());
             
 
 
@@ -222,13 +197,5 @@ public:
         }
     }
 
-    ~Game()
-    {
-        delete p;
-        delete[] E;
-        delete b;
-        delete I;
-        delete[] bombsArray;
-        delete[] invadersArray;
-    }
+
 };

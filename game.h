@@ -101,20 +101,6 @@ public:
         E = temp;
     }
 
-    void drawEnemies(RenderWindow &window)
-    {
-        for (int i = 0; i < enemyCount; i++)
-
-        {
-            E[i].move();
-            window.draw(E[i].getSprite());
-            cout<<"enemyCount: "<<i<<endl;
-        }
-
-       
-    }
-
-
     void start_game()
     {
         srand(time(0));
@@ -125,13 +111,10 @@ public:
         Clock clock;
         float timer = 0;
 
-        Invaders I("img/enemy_1.png");
-        addInvader(I);
-
         Clock deltaClock;
         double dt;
 
-
+        double invaderSpawnTimer = 5;
 
         while (window.isOpen())
         {
@@ -140,6 +123,8 @@ public:
             dt = deltaClock.restart().asMicroseconds()/1000000.0f;
             
             timer += time;
+            invaderSpawnTimer -= dt;
+            
             Event e;
             while (window.pollEvent(e))
             {
@@ -148,13 +133,13 @@ public:
             }
 
             if (Keyboard::isKeyPressed(Keyboard::Left))  // If left key is pressed
-                p->move("l");                            // Player will move to left
+                p->move("l", dt);                            // Player will move to left
             if (Keyboard::isKeyPressed(Keyboard::Right)) // If right key is pressed
-                p->move("r");                            // player will move to right
+                p->move("r", dt);                            // player will move to right
             if (Keyboard::isKeyPressed(Keyboard::Up))    // If up key is pressed
-                p->move("u");                            // playet will move upwards
+                p->move("u", dt);                            // playet will move upwards
             if (Keyboard::isKeyPressed(Keyboard::Down))  // If down key is pressed
-                p->move("d");                            // player will move downwards
+                p->move("d", dt);                            // player will move downwards
 
             if(Keyboard::isKeyPressed(Keyboard::Space)){
                 E->move();
@@ -183,8 +168,59 @@ public:
 
             for(int i = 0; i < invadersCount; i++)
             {
+                //cout << "Delta time: " << dt;
                 invadersArray[i].move(dt);
-                window.draw(invadersArray[i].getSprite());
+                invadersArray[i].draw(window);
+            }
+
+            // spawn invaders
+            if(invaderSpawnTimer <= 0)
+            {
+                // choose random number between 1 and 3
+                int random = rand() % 3 + 1;
+                // if random is 1, spawn Alpha
+                if(random == 1)
+                {
+                    Alpha I("img/enemy_1.png");
+
+                    addInvader(I);
+                    
+                }
+                // if random is 2, spawn Beta
+                else if(random == 2)
+                {
+                    Beta I("img/enemy_2.png");
+                    addInvader(I);
+                }
+                // if random is 3, spawn Gamma
+                else if(random == 3)
+                {
+                    Gamma I("img/enemy_3.png");
+                    addInvader(I);
+                }
+                invaderSpawnTimer = 5;
+
+            }
+            
+
+            // loop through all the invaders
+            for (int i = 0; i < invadersCount; i++)
+            {
+                // call onFrame
+                invadersArray[i].onFrame(dt);
+                // if invader.getdropBomb() == true
+                if (invadersArray[i].getDropBomb())
+                   cout << "Spawning bomb" << endl;
+
+                    spawnBomb();
+                }
+            
+
+            // draw all bombs
+            for (int i = 0; i < bombCount; i++)
+            {
+                bombsArray[i].move(dt);
+                bombsArray[i].draw(window);
             }
             
 
@@ -196,6 +232,4 @@ public:
             window.display(); // Displying all the sprites
         }
     }
-
-
 };

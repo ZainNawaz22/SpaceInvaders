@@ -8,7 +8,7 @@ class Player
 public:
 	Texture tex;
 	Sprite sprite;
-	float speed = 0.1;
+	float speed = 100;
 	int x, y;
 	Player(std::string png_path)
 	{
@@ -47,24 +47,21 @@ void fire()
     }
 }
 
-	void move(std::string s)
+	void move(std::string s, double delta_time)
 	{
-		float delta_x = 0, delta_y = 0;
+		float direction_x = 0, direction_y = 0;
 		if (s == "l")
-			delta_x = -1;
+			direction_x = -1;
 
 		else if (s == "r")
-			delta_x = 1;
+			direction_x = 1;
 		// move the player right
 		if (s == "u")
-			delta_y = -1;
+			direction_y = -1;
 		else if (s == "d")
-			delta_y = 1;
+			direction_y = 1;
 
-		delta_x *= speed;
-		delta_y *= speed;
-
-		sprite.move(sf::Vector2f(delta_x, delta_y));
+		sprite.move(sf::Vector2f(direction_x * speed * delta_time, direction_y * speed * delta_time));
 	}
 
 	

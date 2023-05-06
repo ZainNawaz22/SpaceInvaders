@@ -37,8 +37,9 @@ public:
         //write code that moves the bullet from bottom to top
         sprite.move(sf::Vector2f(0, 0.4));
     }
-    Sprite &getSprite()
+    void draw(RenderWindow &window)
     {
-        return sprite;
+        sprite.setTexture(tex);
+        window.draw(sprite);
     }
 };

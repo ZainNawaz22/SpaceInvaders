@@ -113,12 +113,12 @@ class Danger: public Addon{
 class Lives: public Addon{
     public:
         Lives(){
-            texture.loadFromFile("img/lives.png");
+            texture.loadFromFile("img/PNG/Power-ups/aa.png");
             sprite.setTexture(texture);
             sprite.setScale(0.1, 0.1);
             type = 4; //4 is lives
-            x = rand() % 700;
-            y = 0;
+            x = rand() % 700; // random x position
+            y = 0; // start at the top of the screen
             // random velocity
             velX = rand() % 10;
             velY = rand() % 10;
@@ -130,6 +130,12 @@ class Lives: public Addon{
         void move(){
             x += velX;
             y += velY;
+        }
+
+        // get sprite of the addon
+
+        Sprite& getSprite(){
+            return sprite;
         }
 };
 

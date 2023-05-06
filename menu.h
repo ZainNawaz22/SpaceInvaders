@@ -56,7 +56,9 @@ public:
                         {
                             // start the game
                             Game g;
+                            
                             g.start_game();
+                            //g.drawEnemies(window);
 
                             //also close the menu window
                             window.close();

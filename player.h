@@ -22,6 +22,8 @@ public:
 	}
 void fire()
 {
+	Bullet *b = new Bullet("img/PNG/zain.png", 10, Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width / 2, sprite.getPosition().y));
+	b->setDir(false);
 }
 
 	void move(std::string s, double delta_time)
@@ -104,13 +106,11 @@ void fire()
 
 	// make a function that draws bullets on the screen when the fire function is called
 
-	void drawBullets(sf::RenderWindow &window)
-	{
-	}
+
 
 	Vector2f getPosition()
 	{
-		// return the center position of the player
-		return Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width / 2, sprite.getPosition().y + sprite.getGlobalBounds().height / 2);
+		// return the slightly above from the center of the player vertically but in the center horizontally
+		return Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width / 2, sprite.getPosition().y - sprite.getGlobalBounds().height / 2);
 	}
 };

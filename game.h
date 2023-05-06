@@ -170,14 +170,12 @@ public:
                 p->move("d", dt);                            // player will move downwards
 
             if(Keyboard::isKeyPressed(Keyboard::Space)){
-                //when spacebar is pressed bullets should be drawn from the player
-                spawnBullet(p->getPosition());
-
-                for(int i = 0; i < bulletCount; i++)
-                {
-                    BulletArray[i].move(dt);
-                    BulletArray[i].draw(window);
+                
+                if(bulletSpawnTimer <= 0){
+                    spawnBullet(p->getPosition());
+                    bulletSpawnTimer = 0.25;
                 }
+
 
 
             }
@@ -200,6 +198,13 @@ public:
 
             window.clear(Color::Black); // clears the screen
             window.draw(background);    // setting background
+                        // draw all bullets
+            for(int i = 0; i < bulletCount; i++)
+            {
+                BulletArray[i].move(dt);
+                BulletArray[i].draw(window);
+            }
+            
             window.draw(p->sprite);     // setting player on screen
 
             // draw all bombs
@@ -211,7 +216,6 @@ public:
 
             for(int i = 0; i < invadersCount; i++)
             {
-                //cout << "Delta time: " << dt;
                 invadersArray[i].move(dt);
                 invadersArray[i].draw(window);
             }
@@ -256,23 +260,6 @@ public:
                     spawnBomb(invadersArray[i].getCenter());
                 }
             }
-
-            // draw all bullets
-            for(int i = 0; i < bulletCount; i++)
-            {
-                BulletArray[i].move(dt);
-                BulletArray[i].draw(window);
-            }
-            
-            
-            
-            
-
-            
-            
-
-            
-
 
 
            

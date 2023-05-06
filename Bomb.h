@@ -21,22 +21,21 @@ class Bomb{
             
             Bomb_tex.loadFromFile("img/PNG/zain.png");
             Bomb_sprite.setTexture(Bomb_tex);
-            //Bomb_sprite.setScale(0.75, 0.75);
             // enemy will be spawned at random x position
             Bomb_sprite.setPosition(sf::Vector2f(20, 20));
             this->speed = 10;
             this->direction = true;
-            cout << "Bomb created" << endl;
             
         }
-        Bomb(const string &png_path, float speed){
+        Bomb(const string &png_path, float speed, Vector2f pos){
             Bomb_tex.loadFromFile(png_path);
             Bomb_sprite.setTexture(Bomb_tex);
-            Bomb_sprite.setScale(0.75, 0.75);
             // enemy will be spawned at random x position
-            Bomb_sprite.setPosition(sf::Vector2f(0, 0));
+            Bomb_sprite.setPosition(pos);
             this->speed = speed;
             this->direction = true;
+            // set origin to center of sprite
+            Bomb_sprite.setOrigin(Bomb_sprite.getGlobalBounds().width/2, 0);
         }
 
         void move(double delta){

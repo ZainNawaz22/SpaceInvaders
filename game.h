@@ -32,6 +32,9 @@ public:
 
     Lives livesArray; // array of lives
 
+    // Bullets *array; // array of bullets
+    // int bulletCount; // number of bullets
+
     
 
     Game()
@@ -69,10 +72,11 @@ public:
         bombCount++;
         bombsArray = temp;
     }
+    
 
-    void spawnBomb()
+    void spawnBomb(Vector2f pos)
     {
-        Bomb b;
+        Bomb b("img/PNG/zain.png", 150, pos);
         addBomb(b);
     }
 
@@ -166,6 +170,13 @@ public:
             window.draw(background);    // setting background
             window.draw(p->sprite);     // setting player on screen
 
+            // draw all bombs
+            for (int i = 0; i < bombCount; i++)
+            {
+                bombsArray[i].move(dt);
+                bombsArray[i].draw(window);
+            }
+
             for(int i = 0; i < invadersCount; i++)
             {
                 //cout << "Delta time: " << dt;
@@ -209,19 +220,14 @@ public:
                 // call onFrame
                 invadersArray[i].onFrame(dt);
                 // if invader.getdropBomb() == true
-                if (invadersArray[i].getDropBomb())
-                   cout << "Spawning bomb" << endl;
-
-                    spawnBomb();
+                if (invadersArray[i].getDropBomb()){
+                    spawnBomb(invadersArray[i].getCenter());
                 }
+            }
+            
             
 
-            // draw all bombs
-            for (int i = 0; i < bombCount; i++)
-            {
-                bombsArray[i].move(dt);
-                bombsArray[i].draw(window);
-            }
+            
             
 
             

@@ -4,8 +4,6 @@ class Invaders: public Enemy
 {
     protected:
         int bombRate;
-        int bombSpeed;
-        int bombCount;
         int moveDirection;
         double bombTimer;
         bool dropBomb;
@@ -15,18 +13,16 @@ class Invaders: public Enemy
             bombTimer = 0;
             velocity = 100;
             bombRate = 1;
-            bombSpeed = 1;
-            bombCount = 1;
             moveDirection = 1;
+            dropBomb = false;
             sprite.setPosition(200, 0);
         }
         Invaders(const string &png_path): Enemy(png_path){
             bombTimer = 0;
             velocity = 100;
             bombRate = 1;
-            bombSpeed = 1;
-            bombCount = 1;
             moveDirection = 1;
+            dropBomb = false;
             // randomize x position between 0 and 680
             sprite.setPosition(rand() % 680, 0);
         };
@@ -47,24 +43,13 @@ class Invaders: public Enemy
         void setBombRate(int rate){
             bombRate = rate;
         }
-        void setBombSpeed(int speed){
-            bombSpeed = speed;
-        }
-        void setBombCount(int count){
-            bombCount = count;
-        }
         int getBombRate(){
             return bombRate;
         }
-        int getBombSpeed(){
-            return bombSpeed;
-        }
-        int getBombCount(){
-            return bombCount;
-        }
+
         bool getDropBomb(){
             if(dropBomb == true){
-                bombTimer = 0;
+                bombTimer = 0;                      
                 dropBomb = false;
                 return true;
             }
@@ -76,6 +61,9 @@ class Invaders: public Enemy
             bombTimer += deltaTime;
             if(bombTimer > bombRate){
                 dropBomb = true;
+            }
+            else{
+                dropBomb = false;
             }
         };
 };

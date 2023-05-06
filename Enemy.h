@@ -42,4 +42,11 @@ public:
         sprite.setTexture(tex);
         window.draw(sprite);
     }
+    Vector2f getPosition()
+    {
+        return sprite.getPosition();
+    }
+    Vector2f getCenter(){
+        return Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width/2, sprite.getPosition().y + sprite.getGlobalBounds().height/2);
+    }
 };

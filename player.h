@@ -10,6 +10,15 @@ public:
 	Sprite sprite;
 	float speed = 100;
 	int x, y;
+
+	Player(){
+		tex.loadFromFile("img/PNG/zain.png");
+		sprite.setTexture(tex);
+		x = 340;
+		y = 650;
+		sprite.setPosition(sf::Vector2f(x, y));
+		sprite.setScale(0.75, 0.75);
+	}
 	Player(std::string png_path)
 	{
 
@@ -112,5 +121,14 @@ void fire()
 	{
 		// return the slightly above from the center of the player vertically but in the center horizontally
 		return Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width / 2, sprite.getPosition().y - sprite.getGlobalBounds().height / 2);
+	}
+
+	// make a function that checks if the player collides with the enemy bomb
+	
+
+	// make a function that sets position of the player
+	void setPosition(int x, int y)
+	{
+		sprite.setPosition(sf::Vector2f(x, y));
 	}
 };

@@ -183,6 +183,7 @@ public:
             /////  Call your functions here            ////
 
             p->wrap();
+
           
             
 
@@ -203,6 +204,25 @@ public:
             {
                 BulletArray[i].move(dt);
                 BulletArray[i].draw(window);
+                // check if the bullet hits the enemy
+                for(int j = 0; j < enemyCount; j++)
+                {
+                   if(BulletArray[i].getGlobalBounds().intersects(E[j].getGlobalBounds()))
+                     {
+                          E[j] = E[enemyCount - 1];
+                          enemyCount--;
+                          BulletArray[i] = BulletArray[bulletCount - 1];
+                          bulletCount--;
+                    }
+                }
+
+                // if bullet goes out of screen, delete it
+                if(BulletArray[i].getPosition().y < 0)
+                {
+                    BulletArray[i] = BulletArray[bulletCount - 1];
+                    bulletCount--;
+                }
+               
             }
             
             window.draw(p->sprite);     // setting player on screen
@@ -212,6 +232,12 @@ public:
             {
                 bombsArray[i].move(dt);
                 bombsArray[i].draw(window);
+                // if bomb goes out of screen, delete it
+                if (bombsArray[i].getPosition().y > 700)
+                {
+                    bombsArray[i] = bombsArray[bombCount - 1];
+                    bombCount--;
+                }
             }
 
             for(int i = 0; i < invadersCount; i++)
@@ -260,6 +286,8 @@ public:
                     spawnBomb(invadersArray[i].getCenter());
                 }
             }
+
+        
 
 
            

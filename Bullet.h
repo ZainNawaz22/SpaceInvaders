@@ -4,11 +4,11 @@
 #include <time.h>
 #include <math.h>
 
+
 using namespace sf;
 using namespace std;
 
-class Bullet
-{
+class Bullet{
 private:
     Texture Bullet_tex;
     Sprite Bullet_sprite;
@@ -99,4 +99,45 @@ public:
     {
         return Bullet_sprite;
     }
+    // detect whether the bullet of spaceship is out of the screen
+    bool isOut()
+    {
+        if (Bullet_sprite.getPosition().y < 0 || Bullet_sprite.getPosition().y > 800)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    // delete the bullet when it is out of the screen
+    void deleteBullet()
+    {
+        if (isOut())
+        {
+            delete this;
+        }
+    }
+
+    Vector2f getPosition()
+    {
+        return Bullet_sprite.getPosition();
+    }
+
+    // detect the collision between bullet and enemy
+    bool isCollide(Sprite &enemy)
+    {
+        if (Bullet_sprite.getGlobalBounds().intersects(enemy.getGlobalBounds()))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    // write function to get global bounds of bullet
+    FloatRect getGlobalBounds()
+    {
+        return Bullet_sprite.getGlobalBounds();
+    }
+    
+
 };

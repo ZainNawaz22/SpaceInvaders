@@ -49,4 +49,20 @@ public:
     Vector2f getCenter(){
         return Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width/2, sprite.getPosition().y + sprite.getGlobalBounds().height/2);
     }
+
+    void setPosition(Vector2f pos)
+    {
+        sprite.setPosition(pos);
+    }
+
+    Sprite& getSprite()
+    {
+        return sprite;
+    }
+
+    //get global bounds of the sprite
+    FloatRect getGlobalBounds()
+    {
+        return sprite.getGlobalBounds();
+    }
 };

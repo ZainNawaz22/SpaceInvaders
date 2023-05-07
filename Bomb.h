@@ -73,4 +73,12 @@ class Bomb{
         float getSpeed(){
             return speed;
         }
+
+        Sprite& getSprite(){
+            return Bomb_sprite;
+        }
+
+        Vector2f getPosition(){
+            return Bomb_sprite.getPosition();
+        }
 };

@@ -58,6 +58,10 @@ class PowerUp: public Addon{
             x += velX;
             y += velY;
         }
+
+        Sprite& getSprite(){
+            return sprite;
+        }
 };
 
 class Fire: public Addon{
@@ -122,6 +126,21 @@ class Lives: public Addon{
             // random velocity
             velX = rand() % 10;
             velY = rand() % 10;
+            cout << "Lives created" << endl;
+        }
+
+        Lives(const string &png_path, float speed, Vector2f pos)
+        {
+            texture.loadFromFile(png_path);
+            sprite.setTexture(texture);
+            sprite.setScale(0.75, 0.75);
+
+            sprite.setPosition(Vector2f(pos.x, pos.y));
+
+            sprite.setOrigin(sprite.getGlobalBounds().width / 2, 0);
+
+            cout << "Lives created 2" << endl;
+
         }
         void draw(RenderWindow &window){
             sprite.setPosition(x, y);
@@ -132,10 +151,21 @@ class Lives: public Addon{
             y += velY;
         }
 
-        // get sprite of the addon
+        void move(float dt)
+        {
+            x += velX * dt;
+            y += velY * dt;
+        }
+
+        Vector2f getPosition()
+        {
+            return Vector2f(x, y);
+        }
 
         Sprite& getSprite(){
             return sprite;
         }
+
+        // get sprite of the addon
 };
 

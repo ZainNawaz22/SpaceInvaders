@@ -6,6 +6,7 @@ using namespace sf;
 class Player
 {
 public:
+	Bullet *BulletArray; // array of bullets
 	Texture tex;
 	Sprite sprite;
 	float speed = 100;
@@ -131,4 +132,5 @@ void fire()
 	{
 		sprite.setPosition(sf::Vector2f(x, y));
 	}
+
 };

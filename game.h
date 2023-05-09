@@ -18,7 +18,7 @@ public:
     Player *p; // player
     // add other game attributes
     Enemy *E; // enemy
-    int enemyCount; // number of enemies
+    int enemyCount=0; // number of enemies
 
     
     Invaders *I; // invaderss
@@ -30,21 +30,27 @@ public:
     Invaders *invadersArray; // array of invaders
     int invadersCount; // number of invaders
 
-    Lives livesArray; // array of lives
+    Lives *livesArray; // array of lives
+    int livesCount; // number of lives
 
     Bullet *BulletArray; // array of bullets
     int bulletCount; // number of bullets
+
+   
+    
 
     
 
     Game()
     {
         p = new Player("img/player_ship.png");
-        E = new Enemy("img/enemy_1.png");
-        I = new Invaders("img/enemy_1.png");
+      //  E = new Enemy("img/enemy_1.png");
+      //  I = new Invaders("img/enemy_1.png");
         // draw the Lives Addons from Addons.h
         // enemyCount = 1;
         // E = new Enemy[enemyCount];
+        livesArray = new Lives[0];
+        livesCount = 0;
         
         E = nullptr;
         enemyCount = 0;
@@ -58,6 +64,8 @@ public:
 
         invadersArray = new Invaders[0];
         invadersCount = 0;
+
+        
 
         bg_texture.loadFromFile("img/background.jpg");
         background.setTexture(bg_texture);
@@ -109,6 +117,7 @@ public:
         }
         temp[invadersCount] = i;
         invadersCount++;
+        cout<<"InvadersCount"<<invadersCount;
         invadersArray = temp;
     }
 
@@ -121,8 +130,27 @@ public:
         }
         temp[enemyCount] = e;
         enemyCount++;
+        cout<<"enemy_count"<<enemyCount<<endl;
         delete[] E;
         E = temp;
+    }
+
+    void addLives(Lives &l)
+    {
+        Lives *temp = new Lives[livesCount + 1];
+        for (int i = 0; i < livesCount; i++)
+        {
+            temp[i] = livesArray[i];
+        }
+        temp[livesCount] = l;
+        livesCount++;
+        livesArray = temp;
+    }
+
+    void spawnLives(Vector2f pos)
+    {
+        Lives l("img/PNG/UI/playerLife1_blue.png", 150, pos);
+        addLives(l);
     }
 
     void start_game()
@@ -204,29 +232,39 @@ public:
             {
                 BulletArray[i].move(dt);
                 BulletArray[i].draw(window);
-                // check if the bullet hits the enemy
-                for(int j = 0; j < enemyCount; j++)
+               
+                // check if the bullet sprite intersects with enemy sprite and delete both
+                for(int j = 0; j < invadersCount; j++)
                 {
-                   if(BulletArray[i].getGlobalBounds().intersects(E[j].getGlobalBounds()))
-                     {
-                          E[j] = E[enemyCount - 1];
-                          enemyCount--;
-                          BulletArray[i] = BulletArray[bulletCount - 1];
-                          bulletCount--;
+                    if(BulletArray[i].getSprite().getGlobalBounds().intersects(invadersArray[j].getSprite().getGlobalBounds()))
+                    {
+                        BulletArray[i].setDestroy();
+                        invadersArray[j].setDestroy(true);
                     }
                 }
+                
+    
+                
 
-                // if bullet goes out of screen, delete it
+                //if bullet goes out of screen, delete it
                 if(BulletArray[i].getPosition().y < 0)
                 {
                     BulletArray[i] = BulletArray[bulletCount - 1];
                     bulletCount--;
+                    cout<<"bullet_count"<<bulletCount<<endl;
+                    
                 }
                
             }
             
             window.draw(p->sprite);     // setting player on screen
 
+            for(int i = 0; i < livesCount; i++)
+            {
+                livesArray[i].move(dt);
+                livesArray[i].draw(window);
+
+            }
             // draw all bombs
             for (int i = 0; i < bombCount; i++)
             {
@@ -245,6 +283,7 @@ public:
                 invadersArray[i].move(dt);
                 invadersArray[i].draw(window);
             }
+
 
             // spawn invaders
             if(invaderSpawnTimer <= 0)
@@ -286,6 +325,10 @@ public:
                     spawnBomb(invadersArray[i].getCenter());
                 }
             }
+
+            //make a collision function that when the sprite of bullet and invader collide, the invader is deleted
+
+
 
         
 

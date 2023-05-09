@@ -65,7 +65,13 @@ class Invaders: public Enemy
             else{
                 dropBomb = false;
             }
-        };
+        }
+
+        void setDestroy(bool destroy){
+            if(destroy == true){
+                sprite.setPosition(200, 0);
+            }
+        }
 };
 
 class Alpha: public Invaders{

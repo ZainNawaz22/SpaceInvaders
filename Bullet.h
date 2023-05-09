@@ -66,8 +66,9 @@ public:
 
     void setPos(float x, float y)
     {
-        Bullet_sprite.setPosition(sf::Vector2f(x, y));
+        Bullet_sprite.setPosition(x, y);
     }
+   
 
     void setDir(bool dir)
     {
@@ -137,6 +138,11 @@ public:
     FloatRect getGlobalBounds()
     {
         return Bullet_sprite.getGlobalBounds();
+    }
+
+    void setDestroy()
+    {
+        Bullet_sprite.setPosition(-800, -800);
     }
     
 

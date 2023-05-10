@@ -129,34 +129,41 @@ class Lives: public Addon{
             cout << "Lives created" << endl;
         }
 
-        Lives(const string &png_path, float speed, Vector2f pos)
+        Lives(const string &png_path, float speed)
         {
             texture.loadFromFile(png_path);
             sprite.setTexture(texture);
             sprite.setScale(0.75, 0.75);
 
-            sprite.setPosition(Vector2f(pos.x, pos.y));
+            x = rand() % 700; // random x position
+            y = 0; // start at the top of the screen
+
+            sprite.setPosition(Vector2f(x, y));
 
             sprite.setOrigin(sprite.getGlobalBounds().width / 2, 0);
 
             cout << "Lives created 2" << endl;
+            
 
         }
-        void draw(RenderWindow &window){
-            int x = rand() % 700; // random x position
-            int y = 0; // start at the top of the screen
-            sprite.setPosition(x, y);
+        void draw(RenderWindow &window){  
+            //set the texture
+            sprite.setTexture(texture);          
             window.draw(sprite);
         }
-        void move(){
-            x += velX;
-            y += velY;
-        }
+        // void move(){
+        //     x += velX;
+        //     y += velY;
+        //     sprite.setPosition(x, y);
+        // }
+
+
 
         void move(float dt)
         {
             x += velX * dt;
             y += velY * dt;
+            sprite.setPosition(Vector2f(x, y));
         }
 
         Vector2f getPosition()
@@ -168,6 +175,5 @@ class Lives: public Addon{
             return sprite;
         }
 
-        // get sprite of the addon
 };
 

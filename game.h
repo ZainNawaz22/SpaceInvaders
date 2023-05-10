@@ -19,6 +19,7 @@ public:
     // add other game attributes
     Enemy *E; // enemy
     int enemyCount=0; // number of enemies
+    bool paused;
 
     
     Invaders *I; // invaderss
@@ -51,6 +52,7 @@ public:
         // E = new Enemy[enemyCount];
         livesArray = new Lives[0];
         livesCount = 0;
+        paused = false;
         
         E = nullptr;
         enemyCount = 0;
@@ -145,10 +147,12 @@ public:
         livesArray = temp;
     }
 
-    void spawnLives(Vector2f pos)
+    void spawnLives()
     {
-        Lives l("img/PNG/UI/playerLife1_blue.png", 150, pos);
+        Lives l("img/PNG/UI/playerLife1_blue.png", 150);
+
         addLives(l);
+        
     }
 
     void start_game()
@@ -166,7 +170,10 @@ public:
 
         double invaderSpawnTimer = 5;
         double bulletSpawnTimer = 1;
+        double timer2 = 2;
+        double addonSpawnTimer = 10;
 
+        paused = false;
         
 
         while (window.isOpen())
@@ -178,6 +185,8 @@ public:
             timer += time;
             invaderSpawnTimer -= dt;
             bulletSpawnTimer -= dt;
+            timer2 -= dt;
+            addonSpawnTimer -= dt;
             
             Event e;
             while (window.pollEvent(e))
@@ -186,23 +195,30 @@ public:
                     window.close();          // close the game
             }
 
-            if (Keyboard::isKeyPressed(Keyboard::Left))  // If left key is pressed
+            // puase the game
+            if (Keyboard::isKeyPressed(Keyboard::P))
+            {
+                paused = !paused;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Left) && !paused)  // If left key is pressed
                 p->move("l", dt);                            // Player will move to left
-            if (Keyboard::isKeyPressed(Keyboard::Right)) // If right key is pressed
+            if (Keyboard::isKeyPressed(Keyboard::Right) && !paused) // If right key is pressed
                 p->move("r", dt);                            // player will move to right
-            if (Keyboard::isKeyPressed(Keyboard::Up))    // If up key is pressed
+            if (Keyboard::isKeyPressed(Keyboard::Up) && !paused)    // If up key is pressed
                 p->move("u", dt);                            // playet will move upwards
-            if (Keyboard::isKeyPressed(Keyboard::Down))  // If down key is pressed
+            if (Keyboard::isKeyPressed(Keyboard::Down) && !paused)  // If down key is pressed
                 p->move("d", dt);                            // player will move downwards
 
-            if(Keyboard::isKeyPressed(Keyboard::Space)){
+            if(Keyboard::isKeyPressed(Keyboard::Space) && !paused){
                 
                 if(bulletSpawnTimer <= 0){
                     spawnBullet(p->getPosition());
                     bulletSpawnTimer = 0.25;
                 }
             }
-                
+
+
+            
                 
             ////////////////////////////////////////////////
             /////  Call your functions here            ////
@@ -222,15 +238,15 @@ public:
            
          
 
-             window.clear(Color::Black); // clears the screen
+            window.clear(Color::Black); // clears the screen
             window.draw(background);    // setting background
             //             // draw all bullets
-            if(false){
+
             for(int i = 0; i < bulletCount; i++)
             {
-                BulletArray[i].move(dt);
+                if (!paused) BulletArray[i].move(dt);
                 BulletArray[i].draw(window);
-               
+            
                 // check if the bullet sprite intersects with enemy sprite and delete both
                 for(int j = 0; j < invadersCount; j++)
                 {
@@ -244,7 +260,7 @@ public:
                 {
                     invadersArray[i] = invadersArray[invadersCount - 1];
                     invadersCount--;
-                   
+                
                 }
                 
     
@@ -255,25 +271,26 @@ public:
                 {
                     BulletArray[i] = BulletArray[bulletCount - 1];
                     bulletCount--;
-                  
+                
 
                 }
-               
+            
             }
             
             window.draw(p->sprite);     // setting player on screen
 
             for(int i = 0; i < livesCount; i++)
             {
-                cout<<"lives_count"<<livesCount<<endl;
-                livesArray[i].move(dt);
+                //cout<<"lives_count"<<livesCount<<endl;
+                if (!paused) livesArray[i].move(dt);
                 livesArray[i].draw(window);
+                livesArray[i].move(dt);
 
             }
             // draw all bombs
             for (int i = 0; i < bombCount; i++)
             {
-                bombsArray[i].move(dt);
+                if (!paused) bombsArray[i].move(dt);
                 bombsArray[i].draw(window);
 
                 for(int j = 0; j < bombCount; j++)
@@ -283,7 +300,7 @@ public:
                         
                         bombsArray[i].setDestroy();
                         p->setDestroy(true);
-                       
+                    
                     }
                 }
                 // if bomb goes out of screen, delete it
@@ -296,8 +313,13 @@ public:
 
             for(int i = 0; i < invadersCount; i++)
             {
-                invadersArray[i].move(dt);
+                if (!paused) invadersArray[i].move(dt);
                 invadersArray[i].draw(window);
+            }
+
+            if(paused){
+                window.display();
+                continue;
             }
 
 
@@ -342,12 +364,26 @@ public:
                 }
             }
 
+            // spawn addons
+            if(addonSpawnTimer <= 0)
+            {
+                // choose random number between 1 and 3
+                int random = rand() % 3 + 1;
+                // if random is 1, Lives
+                if(random == 1 || true)  
+                {
+                    spawnLives();
+                }
+                // if random is 2....
 
-
+                // randomize spawn timer between 10 and 20
+                addonSpawnTimer = rand() % 10 + 10;
             }
+
            
            
             window.display(); // Displying all the sprites
         }
+        
     }
 };

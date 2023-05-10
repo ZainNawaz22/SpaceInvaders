@@ -143,6 +143,8 @@ class Lives: public Addon{
 
         }
         void draw(RenderWindow &window){
+            int x = rand() % 700; // random x position
+            int y = 0; // start at the top of the screen
             sprite.setPosition(x, y);
             window.draw(sprite);
         }

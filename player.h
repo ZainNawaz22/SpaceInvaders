@@ -133,4 +133,16 @@ void fire()
 		sprite.setPosition(sf::Vector2f(x, y));
 	}
 
+	//write the that rotates the player sprite by a certain angle
+	void rotate(float angle)
+	{
+		sprite.rotate(angle);
+	}
+
+	void setDestroy(bool d){
+		if(d){
+			sprite.setPosition(0, 0);
+		}
+	}
+
 };

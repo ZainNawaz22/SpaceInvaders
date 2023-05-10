@@ -81,4 +81,15 @@ class Bomb{
         Vector2f getPosition(){
             return Bomb_sprite.getPosition();
         }
+
+        FloatRect getGlobalBounds(){
+            return Bomb_sprite.getGlobalBounds();
+        }
+
+        void setDestroy(){
+            Bomb_sprite.setPosition(1000, 1000);
+        }
+
+        
+
 };

@@ -117,7 +117,6 @@ public:
         }
         temp[invadersCount] = i;
         invadersCount++;
-        cout<<"InvadersCount"<<invadersCount;
         invadersArray = temp;
     }
 
@@ -130,7 +129,6 @@ public:
         }
         temp[enemyCount] = e;
         enemyCount++;
-        cout<<"enemy_count"<<enemyCount<<endl;
         delete[] E;
         E = temp;
     }
@@ -203,10 +201,9 @@ public:
                     spawnBullet(p->getPosition());
                     bulletSpawnTimer = 0.25;
                 }
-
-
-
             }
+                
+                
             ////////////////////////////////////////////////
             /////  Call your functions here            ////
 
@@ -225,9 +222,10 @@ public:
            
          
 
-            window.clear(Color::Black); // clears the screen
+             window.clear(Color::Black); // clears the screen
             window.draw(background);    // setting background
-                        // draw all bullets
+            //             // draw all bullets
+            if(false){
             for(int i = 0; i < bulletCount; i++)
             {
                 BulletArray[i].move(dt);
@@ -242,6 +240,12 @@ public:
                         invadersArray[j].setDestroy(true);
                     }
                 }
+                if(invadersArray[i].getDestroy())
+                {
+                    invadersArray[i] = invadersArray[invadersCount - 1];
+                    invadersCount--;
+                   
+                }
                 
     
                 
@@ -251,8 +255,8 @@ public:
                 {
                     BulletArray[i] = BulletArray[bulletCount - 1];
                     bulletCount--;
-                    cout<<"bullet_count"<<bulletCount<<endl;
-                    
+                  
+
                 }
                
             }
@@ -261,6 +265,7 @@ public:
 
             for(int i = 0; i < livesCount; i++)
             {
+                cout<<"lives_count"<<livesCount<<endl;
                 livesArray[i].move(dt);
                 livesArray[i].draw(window);
 
@@ -270,6 +275,17 @@ public:
             {
                 bombsArray[i].move(dt);
                 bombsArray[i].draw(window);
+
+                for(int j = 0; j < bombCount; j++)
+                {
+                    if(bombsArray[i].getSprite().getGlobalBounds().intersects(p->getSprite().getGlobalBounds()))
+                    {
+                        
+                        bombsArray[i].setDestroy();
+                        p->setDestroy(true);
+                       
+                    }
+                }
                 // if bomb goes out of screen, delete it
                 if (bombsArray[i].getPosition().y > 700)
                 {
@@ -326,13 +342,10 @@ public:
                 }
             }
 
-            //make a collision function that when the sprite of bullet and invader collide, the invader is deleted
 
 
-
-        
-
-
+            }
+           
            
             window.display(); // Displying all the sprites
         }

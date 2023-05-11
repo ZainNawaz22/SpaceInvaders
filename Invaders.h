@@ -71,7 +71,8 @@ class Invaders: public Enemy
             if(destroy == true){
                 int x = rand() % 680;
                 int y = -1000;
-                sprite.setPosition(x,y);
+                //sprite.setPosition(x,y);
+                sprite.move(1000, 1500);
             }
         }
         //GET destroy function

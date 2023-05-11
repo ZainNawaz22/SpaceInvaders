@@ -78,7 +78,13 @@ public:
            // window.display();
             
             Game g;
+
+            
             g.start_game();
+
+
+
+
     
 
 
@@ -88,8 +94,6 @@ public:
 
 
 
-        // Game g;
-        // g.start_game();
         
         
     };

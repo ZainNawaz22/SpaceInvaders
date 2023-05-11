@@ -3,7 +3,7 @@
 #include "Bullet.h"
 #include "Addons.h"
 using namespace sf;
-class Player
+class Player: public Addon
 {
 public:
 	Bullet *BulletArray; // array of bullets

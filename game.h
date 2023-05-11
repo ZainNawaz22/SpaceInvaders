@@ -3,8 +3,7 @@
 #include "player.h"
 #include "Enemy.h"
 #include "Invaders.h"
-//#include "Bomb.h"
-//#include "Bullet.h"
+#include "LevelScore.h"
 
 
 const char title[] = "OOP-Project, Spring-2023";
@@ -37,6 +36,9 @@ public:
     Bullet *BulletArray; // array of bullets
     int bulletCount; // number of bullets
 
+    Score *levelScore; // level score
+    bool scoreIncrease;
+
    
     
 
@@ -45,11 +47,13 @@ public:
     Game()
     {
         p = new Player("img/player_ship.png");
+        levelScore = new Score();
       //  E = new Enemy("img/enemy_1.png");
       //  I = new Invaders("img/enemy_1.png");
         // draw the Lives Addons from Addons.h
         // enemyCount = 1;
         // E = new Enemy[enemyCount];
+
         livesArray = new Lives[0];
         livesCount = 0;
         paused = false;
@@ -72,6 +76,8 @@ public:
         bg_texture.loadFromFile("img/background.jpg");
         background.setTexture(bg_texture);
         background.setScale(2.25, 1.35);
+
+        scoreIncrease = false;
     }
     void addBomb(Bomb &b)
     {
@@ -224,6 +230,7 @@ public:
             /////  Call your functions here            ////
 
             p->wrap();
+            
 
           
             
@@ -250,8 +257,10 @@ public:
                 // check if the bullet sprite intersects with enemy sprite and delete both
                 for(int j = 0; j < invadersCount; j++)
                 {
+
                     if(BulletArray[i].getSprite().getGlobalBounds().intersects(invadersArray[j].getSprite().getGlobalBounds()))
                     {
+                        scoreIncrease = true;
                         BulletArray[i].setDestroy();
                         invadersArray[j].setDestroy(true);
                     }
@@ -260,7 +269,6 @@ public:
                 {
                     invadersArray[i] = invadersArray[invadersCount - 1];
                     invadersCount--;
-                
                 }
                 
     
@@ -318,6 +326,9 @@ public:
             }
 
             if(paused){
+                
+
+                
                 window.display();
                 continue;
             }
@@ -364,6 +375,8 @@ public:
                 }
             }
 
+            
+
             // spawn addons
             if(addonSpawnTimer <= 0)
             {
@@ -379,9 +392,12 @@ public:
                 // randomize spawn timer between 10 and 20
                 addonSpawnTimer = rand() % 10 + 10;
             }
-
-           
-           
+            if(scoreIncrease){
+                levelScore->update();
+                scoreIncrease = false;
+            }
+            levelScore->draw(window);
+            
             window.display(); // Displying all the sprites
         }
         

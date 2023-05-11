@@ -112,6 +112,14 @@ class Danger: public Addon{
             x += velX;
             y += velY;
         }
+
+        void move(double dt){
+            
+            sprite.move(0, velY * dt);
+        }
+        Sprite& getSprite(){
+            return sprite;
+        }
 };
 
 class Lives: public Addon{
@@ -161,9 +169,9 @@ class Lives: public Addon{
 
         void move(float dt)
         {
-            x += velX * dt;
-            y += velY * dt;
-            sprite.setPosition(Vector2f(x, y));
+            //cout << "Lives move" << endl;
+            y += 100 * dt;
+            sprite.setPosition(x, y);
         }
 
         Vector2f getPosition()

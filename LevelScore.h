@@ -29,4 +29,10 @@ class Score{
             score+=10;
             text.setString("Score: " + to_string(score));
         }
+
+        void update(int increase){
+            score+=increase;
+            text.setString("Score: " + to_string(score));
+        }
+
 };

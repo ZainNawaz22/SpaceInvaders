@@ -6,11 +6,12 @@ using namespace sf;
 class Player: public Addon
 {
 public:
-	Bullet *BulletArray; // array of bullets
+	Bullet *b; // array of bullets
 	Texture tex;
 	Sprite sprite;
 	float speed = 100;
 	int x, y;
+	int lives = 3;
 
 	Player(){
 		tex.loadFromFile("img/PNG/zain.png");
@@ -32,7 +33,7 @@ public:
 	}
 void fire()
 {
-	Bullet *b = new Bullet("img/PNG/zain.png", 10, Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width / 2, sprite.getPosition().y));
+	b = new Bullet("img/PNG/zain.png", 10, Vector2f(sprite.getPosition().x + sprite.getGlobalBounds().width / 2, sprite.getPosition().y));
 	b->setDir(false);
 }
 
@@ -68,33 +69,33 @@ void fire()
 	}
 
 	// make a function that checks if player collides with addon
-	void onAddonPickup(Addon *&a, int &addon_count){
-		if (sprite.getGlobalBounds().intersects(a->getSprite().getGlobalBounds())){
-			bool addonActive = true;
-			if(a->getType() == 1){
-				//powerup
-				speed += 0.1;
-				// create a timer that will run for 10 seconds and then set the speed back to normal
-				delete a;
-				addon_count--;
-				a = nullptr;
-			}
-			else if(a->getType() == 2){
-				//fire
-				fire();
-			}
-			else if(a->getType() == 3){
-				//danger
-				//speed -= 0.1;
-			}
-			else if(a->getType() == 4){
-				//lives
-				//lives++;
+	// void onAddonPickup(Addon *&a, int &addon_count){
+	// 	if (sprite.getGlobalBounds().intersects(a->getSprite().getGlobalBounds())){
+	// 		bool addonActive = true;
+	// 		if(a->getType() == 1){
+	// 			//powerup
+	// 			speed += 0.1;
+	// 			// create a timer that will run for 10 seconds and then set the speed back to normal
+	// 			delete a;
+	// 			addon_count--;
+	// 			a = nullptr;
+	// 		}
+	// 		else if(a->getType() == 2){
+	// 			//fire
+	// 			fire();
+	// 		}
+	// 		else if(a->getType() == 3){
+	// 			//danger
+	// 			//speed -= 0.1;
+	// 		}
+	// 		else if(a->getType() == 4){
+	// 			//lives
+	// 			//lives++;
 
 
-			}
-		}
-	}
+	// 		}
+	// 	}
+	// }
 
 
 	// make the function that constantly checks the players position
@@ -142,6 +143,35 @@ void fire()
 	void setDestroy(bool d){
 		if(d){
 			sprite.setPosition(0, 0);
+		}
+	}
+
+	// make a function that renders the number of lives on the screen
+
+	void render(RenderWindow &window)
+	{
+		Font font;
+		font.loadFromFile("fonts/GAME_glm.ttf");
+		Text text;
+		text.setFont(font);
+		text.setString("LIVES: " + std::to_string(getLives()));
+		text.setCharacterSize(24);
+		text.setFillColor(sf::Color::White);
+		text.setPosition(620, 10);
+		window.draw(text);
+	}
+
+	int getLives(){
+		return lives;
+	}
+
+	// increase or decrease the number of lives
+	void setLives(bool increase){
+		if(increase){
+			lives++;
+		}
+		else{
+			lives--;
 		}
 	}
 

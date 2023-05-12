@@ -78,8 +78,6 @@ public:
            // window.display();
             
             Game g;
-
-            
             g.start_game();
 
 

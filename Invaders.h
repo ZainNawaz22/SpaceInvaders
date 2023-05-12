@@ -75,7 +75,7 @@ class Invaders: public Enemy
                 sprite.move(1000, 1500);
             }
         }
-        //GET destroy function
+       
         bool getDestroy(){
             if(sprite.getPosition().y > 450){
                 return true;

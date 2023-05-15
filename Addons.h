@@ -53,6 +53,15 @@ public:
         }
         return false;
     }
+
+    bool isColliding(Sprite &sprite1, Sprite &sprite2)
+    {
+        if (intersect(sprite1, sprite2))
+        {
+            return true;
+        }
+        return false;
+    }
 };
 
 class PowerUp : public Addon
@@ -122,6 +131,7 @@ public:
 class Fire : public Addon
 {
 public:
+    
     Fire()
     {
         texture.loadFromFile("img/PNG/Power-ups/bolt_bronze.png");
@@ -190,6 +200,7 @@ public:
     {
         return Vector2f(x, y);
     }
+
 
 };
 

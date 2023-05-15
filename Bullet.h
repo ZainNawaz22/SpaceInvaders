@@ -13,7 +13,7 @@ private:
     Texture Bullet_tex;
     Sprite Bullet_sprite;
     float speed;
-    bool direction;
+    double direction;
 
 public:
 
@@ -25,10 +25,10 @@ public:
             // enemy will be spawned at random x position
             Bullet_sprite.setPosition(sf::Vector2f(20, 20));
             this->speed = 10;
-            this->direction = true;
+            this->direction = -1;
             
     }
-    Bullet(const string &png_path, float speed, Vector2f pos)
+    Bullet(const string &png_path, float speed, Vector2f pos, double direction = -1)
     {
         Bullet_tex.loadFromFile(png_path);
         Bullet_sprite.setTexture(Bullet_tex);
@@ -53,15 +53,15 @@ public:
 
     void move(double dt)
     {
-        //move the bullet from nosal to the top
-        if (direction == true)
-        {
-            Bullet_sprite.move(0, speed * dt);
-        }
-        else
-        {
+        if(direction == -1){
             Bullet_sprite.move(0, -speed * dt);
         }
+        else{
+            double rad = direction * 3.14159265358979323846 / 180;
+            Bullet_sprite.move(speed * cos(rad) * dt, speed * sin(rad) * dt);
+        }
+    
+
     }
 
     void setPos(float x, float y)

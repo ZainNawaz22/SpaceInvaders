@@ -11,87 +11,248 @@ public:
 
     }
 
-    void display_menu(){
+    //make a menu function that displays the menu
 
-    // {
-    //     RenderWindow window(VideoMode(350, 600), "OOP-Project, Spring-2023");
-    //     Texture menu_texture;
-    //     menu_texture.loadFromFile("img/background.png");
-    //     Sprite menu_sprite(menu_texture);
+void display_menu() {
+    // ...
 
-    //     // Creating the "Start" button texture and sprite
-    //     Texture start_button_texture;
-    //     start_button_texture.loadFromFile("img/PNG/UI/buttonGreen.png");
-    //     Sprite start_button_sprite(start_button_texture);
-    //     start_button_sprite.setPosition(90, 200);
-
-    //     // Add text to the start button
-    //     Font font;
-    //     font.loadFromFile("fonts/GAME_glm.ttf");
-    //     Text start_button_text;
-    //     start_button_text.setFont(font);
-    //     start_button_text.setString("Start");
-    //     start_button_text.setCharacterSize(24);
-    //     start_button_text.setFillColor(Color::Black);
-    //     start_button_text.setPosition(155, 195);
+    // Create the window
+    RenderWindow window(VideoMode(780, 700), "OOP-Project, Spring-2023");
+    window.setFramerateLimit(60);
+    // Load background image
+    Texture texture;
+    texture.loadFromFile("img/background_1.png");
+    Sprite menuBackground(texture);
 
 
-    //     // Main Menu Loop
-    //     while (window.isOpen()){
-    //         //handle events
-    //         Event event;
-    //         while(window.pollEvent(event))
-    //         {
+    // Load font and create menu texts
+    Font font;
+    font.loadFromFile("fonts/GAME_glm.ttf");
+    Text text1, text2, text3, text4;
+    text1.setFont(font);
+    text1.setString("Start");
+    text1.setCharacterSize(24);
+    text1.setFillColor(Color::White);
+    text1.setPosition(155, 195);
 
-    //             switch (event.type)
-    //             {
-    //             case Event::Closed:
-    //                 window.close();
-    //                 break;
-    //             case Event::MouseButtonPressed:
-    //                 if (event.mouseButton.button == Mouse::Left)
-    //                 {
-    //                     // if the mouse is clicked on the start button
-    //                     if (start_button_sprite.getGlobalBounds().contains(window.mapPixelToCoords(Mouse::getPosition(window))))
-    //                     {
-    //                         // start the game
-    //                         Game g;
-                            
-    //                         g.start_game();
-    //                         //g.drawEnemies(window);
+    text2.setFont(font);
+    text2.setString("Instructions");
+    text2.setCharacterSize(24);
+    text2.setFillColor(Color::Black);
+    text2.setPosition(155, 245);
 
-    //                         //also close the menu window
-    //                         window.close();
+    text3.setFont(font);
+    text3.setString("High Scores");
+    text3.setCharacterSize(24);
+    text3.setFillColor(Color::Black);
+    text3.setPosition(155, 295);
 
-    //                     }
-    //                 }
-    //                 break;
-    //             }
-    //         }
+    text4.setFont(font);
+    text4.setString("Exit");
+    text4.setCharacterSize(24);
+    text4.setFillColor(Color::Black);
+    text4.setPosition(155, 345);
 
-            // draw the menu
-            // window.clear();
-            
-            // window.draw(menu_sprite);
-            // window.draw(start_button_sprite);
-            // window.draw(start_button_text);
-           // window.display();
-            
-            Game g;
-            g.start_game();
+    // Main Menu Loop
+    while (window.isOpen()) {
+        // Handle events
+        Event event;
+        while (window.pollEvent(event)) {
+            switch (event.type) {
+                case Event::Closed:
+                    window.close();
+                    break;
+                case Event::KeyPressed:
+                    if (event.key.code == Keyboard::H) {
+                        // Display high score menu
+                        // display_high_score_menu(window);
+                    } else if (event.key.code == Keyboard::I) {
+                        // Display instructions menu
+                         display_instructions_menu(window);
+                    } else if (event.key.code == Keyboard::Enter) {
+                        // Start the game
+                        Game g;
+                        g.start_game(window);
+                    }
+                    else if(event.key.code == Keyboard::P){
+                        //Pause the game
+                        //display_pause_menu(window);
+                    }
 
 
-
-
-    
-
-
+                     else if (event.key.code == Keyboard::Escape) {
+                        // Exit the game
+                        window.close();
+                    }
+                    break;
+            }
         }
 
-        
+        // Clear the window
+        window.clear();
+
+        // Draw menu texts
+        window.draw(menuBackground);
+        window.draw(text1);
+        window.draw(text2);
+        window.draw(text3);
+        window.draw(text4);
+
+        // Display the window
+        window.display();
+    }
+}
 
 
 
-        
-        
-    };
+void display_instructions_menu(RenderWindow& window) {
+    // ...
+
+    // Load background image
+    Texture texture;
+    texture.loadFromFile("img/background.jpg");
+    Sprite menuBackground(texture);
+
+    // Load font and create menu texts
+    Font font;
+    font.loadFromFile("fonts/GAME_glm.ttf");
+    Text text1, text2, text3, text4;
+    text1.setFont(font);
+    text1.setString("Instructions");
+    text1.setCharacterSize(24);
+    text1.setFillColor(Color::White);
+    text1.setPosition(155, 195);
+
+    text2.setFont(font);
+    text2.setString("Use the arrow keys to move the snake");
+    text2.setCharacterSize(24);
+    text2.setFillColor(Color::Black);
+    text2.setPosition(155, 245);
+
+    text3.setFont(font);
+    text3.setString("Press P to pause the game");
+    text3.setCharacterSize(24);
+    text3.setFillColor(Color::Black);
+    text3.setPosition(155, 295);
+
+    text4.setFont(font);
+    text4.setString("Press Esc to exit the game");
+    text4.setCharacterSize(24);
+    text4.setFillColor(Color::Black);
+    text4.setPosition(155, 345);
+
+
+    // ...
+
+    // Instructions Menu Loop
+    bool instructionsOpen = true; // Flag to control the instructions menu loop
+    while (instructionsOpen && window.isOpen()) {
+        // Handle events
+        Event event;
+        while (window.pollEvent(event)) {
+            switch (event.type) {
+                case Event::Closed:
+                    window.close();
+                    break;
+                case Event::KeyPressed:
+                    if (event.key.code == Keyboard::Escape) {
+                        
+                        instructionsOpen = false;
+                    }
+                    break;
+            }
+        }
+
+        // Clear the window
+        window.clear();
+
+        // Draw menu texts
+        window.draw(menuBackground);
+        window.draw(text1);
+        window.draw(text2);
+        window.draw(text3);
+        window.draw(text4);
+
+        // Display the window
+        window.display();
+    }
+}
+
+// function for pause menu
+void display_pause_menu(RenderWindow& window) {
+
+    cout<<"pause menu"<<endl;
+
+    // Load font and create menu texts
+    Font font;
+    font.loadFromFile("fonts/GAME_glm.ttf");
+    Text text1, text2, text3, text4;
+    text1.setFont(font);
+    text1.setString("Pause Menu");
+    text1.setCharacterSize(24);
+    text1.setFillColor(Color::White);
+    text1.setPosition(155, 195);
+
+    text2.setFont(font);
+    text2.setString("Press R to resume the game");
+    text2.setCharacterSize(24);
+    text2.setFillColor(Color::Black);
+    text2.setPosition(155, 245);
+
+    text3.setFont(font);
+    text3.setString("Press Esc to exit the game");
+    text3.setCharacterSize(24);
+    text3.setFillColor(Color::Black);
+    text3.setPosition(155, 295);
+
+    text4.setFont(font);
+    text4.setString("Press H to view high scores");
+    text4.setCharacterSize(24);
+    text4.setFillColor(Color::Black);
+    text4.setPosition(155, 345);
+
+
+    // ...
+
+    window.clear();
+
+    // Draw menu texts
+    window.draw(text1);
+    window.draw(text2);
+    window.draw(text3);
+    window.draw(text4);
+
+    // Display the window
+    window.display();
+
+    // Pause Menu Loop
+    bool pauseOpen = true; // Flag to control the pause menu loop
+    while (pauseOpen && window.isOpen()) {
+        // Handle events
+        Event event;
+        while (window.pollEvent(event)) {
+            switch (event.type) {
+                case Event::Closed:
+                    window.close();
+                    break;
+                case Event::KeyPressed:
+                    if (event.key.code == Keyboard::R) {
+                        // Resume the game
+                        pauseOpen = false;
+                    } else if (event.key.code == Keyboard::H) {
+                        // Display high score menu
+                        // display_high_score_menu(window);
+                    } else if (event.key.code == Keyboard::Escape) {
+                        // Exit the game
+                        window.close();
+                    }
+                    break;
+            }
+        }
+    }
+
+
+
+};
+
+};

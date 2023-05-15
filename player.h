@@ -6,12 +6,16 @@ using namespace sf;
 class Player: public Addon
 {
 public:
+	bool active;
+	double fireduration = 5;
+	Clock powerupclock;
 	Bullet *b; // array of bullets
 	Texture tex;
 	Sprite sprite;
 	float speed = 100;
 	int x, y;
 	int lives = 3;
+	
 
 	Player(){
 		tex.loadFromFile("img/PNG/zain.png");
@@ -174,5 +178,30 @@ void fire()
 			lives--;
 		}
 	}
+
+	// activate powerup for 5 seconds
+	void PowerActive(){
+		if(!active){
+			active = true;
+			powerupclock.restart();
+
+		}
+
+	}
+
+	// check if powerup is active
+	bool isActive(){
+		return active;
+	}
+
+	// check if powerup is expired
+	bool isExpired(){
+		if(powerupclock.getElapsedTime().asSeconds() > fireduration){
+			active = false;
+			return true;
+		}
+		return false;
+	}
+
 
 };

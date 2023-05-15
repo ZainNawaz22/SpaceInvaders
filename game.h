@@ -4,9 +4,11 @@
 #include "Enemy.h"
 #include "Invaders.h"
 #include "LevelScore.h"
+#include "MonsterDragon.h"
 
 const char title[] = "OOP-Project, Spring-2023";
 using namespace sf;
+using namespace std;
 
 class Game
 {
@@ -18,7 +20,7 @@ public:
     Enemy *E;           // enemy
     int enemyCount = 0; // number of enemies
     bool paused;
-    bool disapear;
+    bool disappear;
     bool intersect;
 
     Invaders *I; // invaderss
@@ -48,6 +50,14 @@ public:
     PowerUp *powerUpArray; // array of powerUp
     int powerUpCount;      // number of powerUp
 
+    Dragon *DragonArray; //  dragon
+    int dragonCount;
+
+    Monster *monsterArray; // array of monster
+    int monsterCount;      // number of monster
+
+    Clock PowerUpClock;
+
     Game()
     {
         p = new Player("img/player_ship.png");
@@ -61,7 +71,7 @@ public:
         livesArray = new Lives[0];
         livesCount = 0;
         paused = false;
-        disapear = false;
+        disappear = false;
 
         E = nullptr;
         enemyCount = 0;
@@ -83,6 +93,12 @@ public:
 
         powerUpArray = new PowerUp[0];
         powerUpCount = 0;
+
+        DragonArray = new Dragon[0];
+        dragonCount = 0;
+
+        monsterArray = new Monster[0];
+        monsterCount = 0;
 
         bg_texture.loadFromFile("img/background.jpg");
         background.setTexture(bg_texture);
@@ -120,10 +136,31 @@ public:
         BulletArray = temp;
     }
 
-    void spawnBullet(Vector2f pos)
+    // void spawnBullet(Vector2f pos)
+    // {
+    //     Bullet b("img/PNG/Lasers/laserBlue01.png", 150, pos);
+    //     addBullet(b);
+    // }
+
+    void spawnBullet(Vector2f pos, int direction)
     {
-        Bullet b("img/PNG/Lasers/laserBlue01.png", 150, pos);
-        addBullet(b);
+        if (direction == 0)
+        {
+            Bullet b("img/PNG/Lasers/laserBlue01.png", 150, pos);
+            addBullet(b);
+
+        }
+        else
+        {
+            float angle = 360 / 7;
+
+            for (int i = 0; i < 7; i++)
+            {
+                Bullet b("img/PNG/Lasers/laserBlue01.png", 150, pos, angle * i);
+                b.getSprite().setRotation(angle * i + 90);
+                addBullet(b);
+            }
+        }
     }
 
     void addInvader(Invaders &i)
@@ -136,6 +173,24 @@ public:
         temp[invadersCount] = i;
         invadersCount++;
         invadersArray = temp;
+    }
+
+    void addDragon(Dragon &d)
+    {
+        Dragon *temp = new Dragon[dragonCount + 1];
+        for (int i = 0; i < dragonCount; i++)
+        {
+            temp[i] = DragonArray[i];
+        }
+        temp[dragonCount] = d;
+        dragonCount++;
+        DragonArray = temp;
+    }
+
+    void spawnDragon()
+    {
+        Dragon d("img/dragon.png");
+        addDragon(d);
     }
 
     void addEnemy(Enemy &e)
@@ -197,7 +252,7 @@ public:
             temp[i] = fireArray[i];
         }
         temp[fireCount] = f;
-        
+
         fireCount++;
 
         fireArray = temp;
@@ -229,18 +284,35 @@ public:
         addPowerUp(p);
     }
 
-
-
-
-
-    void start_game()
+    void addMonster(Monster &m)
     {
-        srand(time(0));
-        RenderWindow window(VideoMode(780, 700), title);
-        // set fps
-        window.setFramerateLimit(60);
+        Monster *temp = new Monster[monsterCount + 1];
+        for (int i = 0; i < monsterCount; i++)
+        {
+            temp[i] = monsterArray[i];
+        }
+        temp[monsterCount] = m;
+        monsterCount++;
+        monsterArray = temp;
+    }
+
+    void spawnMonster()
+    {
+        Monster m("img/monster1.png");
+
+        addMonster(m);
+    }
+
+    void start_game(RenderWindow& window)
+    {
+        // srand(time(0));
+        // RenderWindow window(VideoMode(780, 700), title);
+        // // set fps
+        // window.setFramerateLimit(60);
 
         Clock clock;
+        
+        
         float timer = 0;
 
         Clock deltaClock;
@@ -249,9 +321,12 @@ public:
         double invaderSpawnTimer = 5;
         double bulletSpawnTimer = 1;
         double addonSpawnTimer = 10;
+        
+        // spawn monster randomly every 20 second
+        double dragonSpawnTimer = 20;
 
         paused = false;
-        disapear = false;
+        disappear = false;
 
         while (window.isOpen())
         {
@@ -262,8 +337,9 @@ public:
             timer += time;
             invaderSpawnTimer -= dt;
             bulletSpawnTimer -= dt;
-            
+
             addonSpawnTimer -= dt;
+            dragonSpawnTimer -= dt;
 
             Event e;
             while (window.pollEvent(e))
@@ -275,8 +351,8 @@ public:
             // puase the game
             if (Keyboard::isKeyPressed(Keyboard::P))
             {
-                paused = !paused;
-                //disapear =!disapear;
+                // paused = !paused;
+                disappear = !disappear;
             }
             if (Keyboard::isKeyPressed(Keyboard::Left) && !paused)  // If left key is pressed
                 p->move("l", dt);                                   // Player will move to left
@@ -289,19 +365,18 @@ public:
 
             if (Keyboard::isKeyPressed(Keyboard::Space) && !paused)
             {
-
-                if (bulletSpawnTimer <= 0)
-                {
-                    spawnBullet(p->getPosition());
+                if(bulletSpawnTimer <= 0){
+                    spawnBullet(p->getPosition(),1);
                     bulletSpawnTimer = 0.25;
-                }
+
+                }                
+
             }
 
             ////////////////////////////////////////////////
             /////  Call your functions here            ////
 
             p->wrap();
-
 
             //////////////////////////////////////////////
 
@@ -311,91 +386,98 @@ public:
 
             for (int i = 0; i < bulletCount; i++)
             {
-                if(!disapear){
+
                 if (!paused)
                     BulletArray[i].move(dt);
                 BulletArray[i].draw(window);
-                }
+
                 // check if the bullet sprite intersects with enemy sprite and delete both
                 for (int j = 0; j < invadersCount; j++)
                 {
-
-                    if (BulletArray[i].getSprite().getGlobalBounds().intersects(invadersArray[j].getSprite().getGlobalBounds()))
+                    if(livesArray->intersect(BulletArray[i].getSprite(), invadersArray[j].getSprite()))    
                     {
 
                         scoreIncrease = true;
                         BulletArray[i].setDestroy();
                         invadersArray[j].setDestroy(true);
                         if (invadersArray[i].getDestroy())
-                {
-                    invadersArray[i] = invadersArray[invadersCount - 1];
-                    invadersCount--;
-                }
+                        {
+                            invadersArray[i] = invadersArray[invadersCount - 1];
+                            invadersCount--;
+                        }
                     }
                 }
-                
 
-                // if bullet goes out of screen, delete it
                 if (BulletArray[i].getPosition().y < 0)
                 {
                     BulletArray[i] = BulletArray[bulletCount - 1];
                     bulletCount--;
                 }
+                
+                if (BulletArray[i].getPosition().x < 0 || BulletArray[i].getPosition().x > 780 || BulletArray[i].getPosition().y > 700)
+                {
+                    BulletArray[i] = BulletArray[bulletCount - 1];
+                    bulletCount--;
+                    
+                }
             }
 
             window.draw(p->sprite); // setting player on screen
 
-             for(int i =0; i<dangerCount; i++)
+            for (int i = 0; i < dangerCount; i++)
             {
-                if(!disapear){
-                
-                if (!paused)
-                    dangerArray[i].move(dt);
-                dangerArray[i].draw(window);
-            }
+                if (!disappear)
+                {
+
+                    if (!paused)
+                        dangerArray[i].move(dt);
+                    dangerArray[i].draw(window);
+                }
             }
 
             for (int i = 0; i < livesCount; i++)
             {
-                if(!disapear){
-                
-                if (!paused)
-                    livesArray[i].move(dt);
-                livesArray[i].draw(window);
+                if (!disappear)
+                {
+
+                    if (!paused)
+                        livesArray[i].move(dt);
+                    livesArray[i].draw(window);
                 }
-                
             }
 
             for (int i = 0; i < fireCount; i++)
             {
-                if(!disapear){
-                
-                if (!paused)
-                    fireArray[i].move(dt);
-                fireArray[i].draw(window);
+                if (!disappear)
+                {
+
+                    if (!paused)
+                        fireArray[i].move(dt);
+                    fireArray[i].draw(window);
                 }
-                
             }
 
             for (int i = 0; i < powerUpCount; i++)
             {
-                if(!disapear){
-                
-                if (!paused)
-                    powerUpArray[i].move(dt);
-                powerUpArray[i].draw(window);
-                }
-                
-            }
+                if (!disappear)
+                {
 
-           
+                    if (!paused)
+                        powerUpArray[i].move(dt);
+                    powerUpArray[i].draw(window);
+                }
+            }
+            
+
             // draw all bombs
             for (int i = 0; i < bombCount; i++)
-            {if(!disapear){
-                if (!paused)
-                    bombsArray[i].move(dt);
-                bombsArray[i].draw(window);
-            }
+            {
+                if (!disappear)
+                {
+                    if (!paused)
+                        bombsArray[i].move(dt);
+                    bombsArray[i].draw(window);
+                }
 
                 for (int j = 0; j < bombCount; j++)
                 {
@@ -418,18 +500,20 @@ public:
 
             for (int i = 0; i < invadersCount; i++)
             {
-                if(!disapear){
-                if (!paused)
-                    invadersArray[i].move(dt);
-                invadersArray[i].draw(window);
-            }
+                if (!disappear)
+                {
+                    if (!paused)
+                        invadersArray[i].move(dt);
+                    invadersArray[i].draw(window);
+                }
             }
 
-            for(int i =0; i< dangerCount; i++){
-                if(livesArray->intersect(dangerArray[i].getSprite(), p->getSprite()))
+            for (int i = 0; i < dangerCount; i++)
+            {
+                if (livesArray->intersect(dangerArray[i].getSprite(), p->getSprite()))
                 {
-                    cout<<"intersect"<<endl;
-                    //dangerArray[i].setDestroy();
+                    cout << "intersect" << endl;
+                    // dangerArray[i].setDestroy();
                     p->setDestroy(true);
                     p->setLives(false);
 
@@ -438,18 +522,57 @@ public:
                 }
             }
 
+
+
             if (paused)
             {
 
+
+                
+
+                Text text1, text2, text3, text4;
+                Font font;
+                font.loadFromFile("fonts/GAME_glm.ttf");
+                text1.setFont(font);
+                text1.setString("Game Paused");
+                text1.setCharacterSize(50);
+                text1.setFillColor(Color::White);
+                text1.setPosition(200, 200);
+
+                text2.setFont(font);
+                text2.setString("Press P to resume");
+                text2.setCharacterSize(30);
+                text2.setFillColor(Color::White);
+                text2.setPosition(250, 300);
+
+                text3.setFont(font);
+                text3.setString("Press Q to quit");
+                text3.setCharacterSize(30);
+                text3.setFillColor(Color::White);
+                text3.setPosition(250, 350);
+                
+                text4.setFont(font);
+                text4.setString("Press R to restart");
+                text4.setCharacterSize(30);
+                text4.setFillColor(Color::White);
+                text4.setPosition(250, 400);
+
+
+
+                window.draw(text1);
+                window.draw(text2);
+                window.draw(text3);
+                window.draw(text4);
                 window.display();
+
                 continue;
             }
 
-            if(disapear){
-                
-                window.display();
-                continue;
-            }
+            // if(disappear){
+
+            //     window.display();
+            //     continue;
+            // }
 
             // spawn invaders
             if (invaderSpawnTimer <= 0)
@@ -478,6 +601,25 @@ public:
                 invaderSpawnTimer = 5;
             }
 
+            for (int i = 0; i < dragonCount; i++)
+            {
+                if (disappear)
+                {
+                    if (!paused)
+                        DragonArray[i].moved(dt);
+                    DragonArray[i].draw(window);
+                }
+            }
+
+            for(int i =0; i< monsterCount;i++){
+                if(disappear){
+                    if(!paused)
+                        monsterArray[i].moved(dt);
+                    monsterArray[i].draw(window);
+                }
+            }
+
+
             // check if player intersects with any of the invaders
 
             for (int i = 0; i < livesCount; i++)
@@ -485,12 +627,23 @@ public:
                 if (livesArray->intersect(p->getSprite(), livesArray[i].getSprite()))
                 {
                     livesArray[i].setDestroy();
-                    
+
                     p->setLives(true);
 
-                
                     livesArray[i] = livesArray[livesCount - 1];
                     livesCount--;
+                }
+            }
+
+            for(int i =0; i< powerUpCount;i++){
+                if(livesArray->intersect(p->getSprite(), powerUpArray[i].getSprite())){
+                    powerUpArray[i].setDestroy();
+                    cout<<"intersect"<<endl;
+                    p->PowerActive();
+
+                    powerUpArray[i] = powerUpArray[powerUpCount - 1];
+                    powerUpCount--;
+                    
                     
                 }
             }
@@ -511,31 +664,27 @@ public:
             if (addonSpawnTimer <= 0)
             {
                 // choose random number between 1 and 3
-                int random = rand() % 4 + 1;
+                int random = 4;
                 // if random is 1, Lives
-                if (random == 1 || true)
+                if (random == 1 && true)
                 {
                     spawnLives();
                 }
-                
-               
-            
-                if(random == 2|| true)
+
+                if (random == 2 && true)
                 {
                     spawnDanger();
                 }
-                
-                if(random == 3|| true)
+
+                if (random == 3 && true)
                 {
                     spawnFire();
                 }
-                
 
-                if(random == 4|| true)
+                if (random == 4 && true)
                 {
                     spawnPowerUp();
                 }
-              
 
                 // randomize spawn timer between 10 and 20
                 addonSpawnTimer = rand() % 10 + 10;
@@ -545,8 +694,26 @@ public:
                 levelScore->update();
                 scoreIncrease = false;
             }
+
+            //spawn dragon
+            if (dragonSpawnTimer <= 0 && disappear == false)
+            {
+                
+                int random = rand() % 2 + 1;
+                if (random == 1)
+                {
+                    spawnDragon();
+                }
+                else if (random == 2)
+                {
+                    spawnMonster();
+                }
+                disappear = !disappear;
+                dragonSpawnTimer = 20;
+            }
+
+
             p->render(window);
-            // livesArray->renderLives(window);
             levelScore->draw(window);
 
             window.display(); // Displying all the sprites
@@ -561,10 +728,8 @@ public:
         delete[] bombsArray;
         delete[] livesArray;
         delete levelScore;
-        // delete dangerArray;
-        // delete fireArray;
-        delete [] dangerArray;
-        delete [] fireArray;
-        delete [] powerUpArray;
+        delete[] dangerArray;
+        delete[] fireArray;
+        delete[] powerUpArray;
     }
 };

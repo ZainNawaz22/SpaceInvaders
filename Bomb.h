@@ -14,36 +14,36 @@ class Bomb{
         Texture Bomb_tex;
         Sprite Bomb_sprite;
         float speed;
-        bool direction;
+        int direction;
     public:
 
         Bomb(){
             
-            Bomb_tex.loadFromFile("img/PNG/zain.png");
+            Bomb_tex.loadFromFile("img/PNG/Lasers/laserRed01.png");
             Bomb_sprite.setTexture(Bomb_tex);
-            // enemy will be spawned at random x position
             Bomb_sprite.setPosition(sf::Vector2f(20, 20));
             this->speed = 10;
-            this->direction = true;
+            this->direction = -1;
             
         }
-        Bomb(const string &png_path, float speed, Vector2f pos){
+        Bomb(const string &png_path, float speed, Vector2f pos, int direction = -1){
             Bomb_tex.loadFromFile(png_path);
             Bomb_sprite.setTexture(Bomb_tex);
             // enemy will be spawned at random x position
             Bomb_sprite.setPosition(pos);
             this->speed = speed;
-            this->direction = true;
+            this->direction = direction;
             // set origin to center of sprite
             Bomb_sprite.setOrigin(Bomb_sprite.getGlobalBounds().width/2, 0);
         }
 
-        void move(double delta){
-            if (direction == true){
-                Bomb_sprite.move(0, speed * delta);
+        void move(double dt){
+            if(direction == -1){
+                Bomb_sprite.move(0, speed * dt);
             }
             else{
-                Bomb_sprite.move(0, -speed * delta);
+                double rad = direction * 3.14159265358979323846 / 180;
+                Bomb_sprite.move(speed * cos(rad) * dt, speed * sin(rad) * dt);
             }
 
             

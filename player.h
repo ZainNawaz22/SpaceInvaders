@@ -1,4 +1,6 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include<SFML/Audio.hpp>
 #include <string.h>
 #include "Bullet.h"
 #include "Addons.h"
@@ -138,7 +140,6 @@ void fire()
 		sprite.setPosition(sf::Vector2f(x, y));
 	}
 
-	//write the that rotates the player sprite by a certain angle
 	void rotate(float angle)
 	{
 		sprite.rotate(angle);
@@ -202,6 +203,25 @@ void fire()
 		}
 		return false;
 	}
+
+	// render the game over screen when the player loses all lives
+	void renderGameOver(RenderWindow &window){
+		//set the condition that if lives == 0 then render the game over screen
+		if(lives <= 0){
+			window.clear();
+			Font font;
+			font.loadFromFile("fonts/GAME_glm.ttf");
+			Text text;
+			text.setFont(font);
+			text.setString("GAME OVER");
+			text.setCharacterSize(100);
+			text.setFillColor(sf::Color::White);
+			text.setPosition(100, 300);
+			window.draw(text);
+		}
+	}
+
+
 
 
 };

@@ -29,18 +29,6 @@ class Dragon:public Enemy{
         
     };
 
-    void setBombRate(int rate){
-        bombrate = rate;
-    }
-
-    bool getDropBomb(){
-        if(dropBomb == true){
-            bombTimer = 0;                      
-            dropBomb = false;
-            return true;
-        }
-        return false;    
-    }
 
     void draw(RenderWindow &window){
         
@@ -71,6 +59,27 @@ class Dragon:public Enemy{
         }
         sprite.move(velocity * deltaTime, 0);
     };
+
+    void setBombTimer(double deltaTime){
+        bombTimer += deltaTime;
+        if(bombTimer >= bombrate){
+            dropBomb = true;
+        }
+    }
+
+    void setBombRate(int rate){
+        bombrate = rate;
+    }
+
+    bool getDropBomb(){
+        if(dropBomb == true){
+            bombTimer = 0;                      
+            dropBomb = false;
+            return true;
+        }
+        return false;
+    }
+
 };
 
 class Monster:public Enemy{
@@ -94,21 +103,9 @@ class Monster:public Enemy{
         velocity = 100;
         dropBomb = false;
         sprite.setPosition(rand() % 680, 0);
+        sprite.setScale(0.5,0.5);
         
     };
-
-    void setBombRate(int rate){
-        bombrate = rate;
-    }
-
-    bool getDropBomb(){
-        if(dropBomb == true){
-            bombTimer = 0;                      
-            dropBomb = false;
-            return true;
-        }
-        return false;    
-    }
 
     void draw(RenderWindow &window){
         
@@ -139,4 +136,24 @@ class Monster:public Enemy{
         }
         sprite.move(velocity * deltaTime, 0);
     };
+
+    void setBombTimer(double deltaTime){
+        bombTimer += deltaTime;
+        if(bombTimer >= bombrate){
+            dropBomb = true;
+        }
+    }
+
+    void setBombRate(int rate){
+        bombrate = rate;
+    }
+
+    bool getDropBomb(){
+        if(dropBomb == true){
+            bombTimer = 0;                      
+            dropBomb = false;
+            return true;
+        }
+        return false;
+    }
 };
